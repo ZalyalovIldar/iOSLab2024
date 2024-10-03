@@ -68,10 +68,15 @@ extension ViewController: UITableViewDataSource {
 extension ViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.row == 0 {
+            return  UITableView.automaticDimension
+        } else if indexPath.row == 1 {
+            return  UITableView.automaticDimension
+        }
+        else if indexPath.row == 2 {
+            return 200
+        }
         return UITableView.automaticDimension
     }
-    
-    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 300
-    }
+
 }
