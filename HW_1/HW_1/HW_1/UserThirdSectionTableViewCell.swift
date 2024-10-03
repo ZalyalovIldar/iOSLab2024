@@ -8,11 +8,16 @@
 import UIKit
 
 class UserThirdSectionTableViewCell: UITableViewCell {
-    
+
+    private lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
     
     private lazy var imageStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.axis = .vertical 
+        stackView.axis = .vertical
         stackView.spacing = 8
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
@@ -28,17 +33,32 @@ class UserThirdSectionTableViewCell: UITableViewCell {
     }
 
     private func setupLayout() {
-        contentView.addSubview(imageStackView)
+        contentView.addSubview(scrollView)
+        scrollView.addSubview(imageStackView)
+
+        
         NSLayoutConstraint.activate([
-            imageStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            imageStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
-            imageStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
-            imageStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8)
+            scrollView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
+        
+        
+        NSLayoutConstraint.activate([
+            imageStackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            imageStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            imageStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            imageStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            imageStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
     }
     
     func configure(with images: [UIImage?]) {
+        
         imageStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        
+        
         for image in images {
             let imageView = UIImageView()
             imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -47,5 +67,9 @@ class UserThirdSectionTableViewCell: UITableViewCell {
             imageView.heightAnchor.constraint(equalToConstant: 200).isActive = true
             imageStackView.addArrangedSubview(imageView)
         }
+
+        
+        layoutIfNeeded()
     }
 }
+
