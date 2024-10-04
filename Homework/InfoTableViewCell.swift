@@ -2,22 +2,31 @@
 //  InfoTableViewCell.swift
 //  Homework
 //
-//  Created by Anna on 04.10.2024.
+//  Created by Anna on 01.10.2024.
 //
 
 import UIKit
 
 class InfoTableViewCell: UITableViewCell {
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    @IBOutlet weak var nameLabel: UILabel!
+    
+    @IBOutlet weak var ageLabel: UILabel!
+    
+    @IBOutlet weak var cityLabel: UILabel!
+    
+    
+    func configure(with user: User) {
+        nameLabel.text = user.name
+        ageLabel.text = user.age
+        cityLabel.text = user.city
     }
     
 }
+
+extension InfoTableViewCell {
+    static var reuseIdentifier: String {
+        return String(describing: self)
+    }
+}
+
