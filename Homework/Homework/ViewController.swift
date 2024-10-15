@@ -10,6 +10,7 @@ import UIKit
 class ViewController: UIViewController {
     
     private lazy var tableView: UITableView = {
+        
         let table = UITableView()
         table.translatesAutoresizingMaskIntoConstraints = false
         table.dataSource = self
@@ -19,6 +20,7 @@ class ViewController: UIViewController {
         table.register(PhotoTableViewCell.self, forCellReuseIdentifier: PhotoTableViewCell.identifier)
         table.estimatedRowHeight = 300
         return table
+        
     }()
     
     private lazy var tableHeaderView: UIView = {
