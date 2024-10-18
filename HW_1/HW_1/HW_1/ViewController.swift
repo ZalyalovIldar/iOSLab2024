@@ -65,17 +65,9 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func setupHeaderView(section: Int) -> UIView? {
-        
-        lazy var headerView: UIView = {
-            let header = UIView()
-            return header
-        }()
-        
-        lazy var headerViewLable: UILabel = {
-            let label = UILabel()
-            label.translatesAutoresizingMaskIntoConstraints = false
-            return label
-        }()
+        let headerView = UIView()
+        let headerViewLable = UILabel()
+        headerViewLable.translatesAutoresizingMaskIntoConstraints = false
         
         headerView.addSubview(headerViewLable)
         
