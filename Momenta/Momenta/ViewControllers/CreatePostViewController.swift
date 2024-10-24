@@ -285,6 +285,7 @@ class CreatePostViewController: UIViewController {
     
     private func addCollectionView() {
         guard postPhotosCollectionView == nil else {
+            postPhotosCollectionView?.isHidden = false
             return
         }
         let layout = UICollectionViewFlowLayout()
