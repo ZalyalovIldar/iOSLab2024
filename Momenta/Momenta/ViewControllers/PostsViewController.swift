@@ -140,6 +140,34 @@ class PostsViewController: UIViewController {
         snapshot.appendItems(posts)
         dataSource?.apply(snapshot,animatingDifferences: animation)
     }
+
+    private func addPost(post: Post, animated: Bool) {
+        posts.append(post)
+        if var snapshot = dataSource?.snapshot() {
+            snapshot.appendItems([post], toSection: .main)
+            dataSource?.apply(snapshot,animatingDifferences: animated)
+            updateHeaderCountLabel()
+        }
+    }
+    
+    private func removePost(post: Post, animated: Bool) {
+        guard let indexObject = posts.firstIndex(where: {$0.id == post.id }) else { return }
+        posts.remove(at: indexObject)
+        if var snapshot = dataSource?.snapshot() {
+            snapshot.deleteItems([post])
+            dataSource?.apply(snapshot, animatingDifferences: animated)
+            updateHeaderCountLabel()
+        }
+    }
+    
+    private func updatePost(updatePost: Post, animated: Bool) {
+        guard let indexObject = posts.firstIndex(where: {$0.id == updatePost.id}) else { return }
+        posts[indexObject] = updatePost
+        if var snapshot = dataSource?.snapshot() {
+            snapshot.reloadItems([updatePost])
+            dataSource?.apply(snapshot, animatingDifferences: animated)
+        }
+    }
     
     // MARK: - Setup NavigationBar
     
@@ -149,10 +177,7 @@ class PostsViewController: UIViewController {
         let action = UIAction { [weak self] _ in
             let createPostVC = CreatePostViewController()
             createPostVC.savePostClosure = {[weak self] post in
-                guard let self = self else { return }
-                self.posts.append(post)
-                self.applySnapshot(posts: posts, animation: true)
-                updateHeaderCountLabel()
+                self?.addPost(post: post, animated: true)
             }
             let createPostNVC = UINavigationController(rootViewController: createPostVC)
             self?.present(createPostNVC, animated: true, completion: nil)
@@ -169,9 +194,7 @@ extension PostsViewController: UITableViewDelegate {
             let detailPostViewController = DetailPostViewController(with: post, delegate: self)
             
             detailPostViewController.updatePostClosure = { [weak self] updatePost in
-                guard let self = self else { return }
-                self.posts[indexPath.item] = updatePost
-                self.applySnapshot(posts: posts, animation: false)
+                self?.updatePost(updatePost: updatePost, animated: false)
             }
             
             navigationController?.pushViewController(detailPostViewController, animated: true)
@@ -184,10 +207,6 @@ extension PostsViewController: UITableViewDelegate {
 
 extension PostsViewController: DetailPostControllerDelegate {
     func deletePost(with post: Post) {
-        if let objectIndex = posts.firstIndex(where: { $0.id == post.id }){
-            posts.remove(at: objectIndex)
-            applySnapshot(posts: posts, animation: false)
-            updateHeaderCountLabel()
-        }
+        removePost(post: post, animated: false)
     }
 }
