@@ -28,7 +28,7 @@ class MomentTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .natural
         label.font = .systemFont(ofSize: 20, weight: .semibold)
-        label.textAlignment = .center // This line seems redundant
+        label.textAlignment = .center
         label.numberOfLines = 1
         return label
     }()
