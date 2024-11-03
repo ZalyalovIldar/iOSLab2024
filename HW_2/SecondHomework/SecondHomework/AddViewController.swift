@@ -84,7 +84,7 @@ class AddViewController: UIViewController {
     }
     
     @objc func savePost() {
-        guard let description = postTextView.text, !description.isEmpty else { return }
+        guard let description = postTextView.text, !description.isEmpty || !photos.isEmpty else { return }
         let picturePaths = selectedImages.map { image in
             saveImageAndReturnPath(image)}
         photos += picturePaths

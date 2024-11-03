@@ -16,7 +16,7 @@ class MainBoardViewController: UIViewController, MainBoardDelegate{
         super.viewDidLoad()
         setupDataSource()
         for _ in 0..<5 {
-            posts.append(Post(date: setDate(), description: "Some short textsome short textsome short textsome short textsome short textsome short textsome short textsome short text", pictures: ["cats", "watermelon","army", "food", "sixfour", "the smile"], id: UUID()))
+            posts.append(Post(date: setDate(), description: "Some short textsome short textsome short textsome short textsome short textsome short textsome short textsome short text", pictures: ["cats", "watermelon","army", "food"], id: UUID()))
         }
         tableView.delegate = self
         tableView.dataSource = dataSource

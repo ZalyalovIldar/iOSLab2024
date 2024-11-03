@@ -23,11 +23,11 @@ class MainBoardTableViewCell: UITableViewCell {
     private lazy var photosCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 10
+        layout.minimumInteritemSpacing = 10
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.isPagingEnabled = true
+        collectionView.isUserInteractionEnabled = false
         collectionView.backgroundColor = .clear
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -57,7 +57,7 @@ class MainBoardTableViewCell: UITableViewCell {
     }
     private func setupLayout() {
         let mainStackView: UIStackView = {
-            let stackView = UIStackView(arrangedSubviews: [photosCollectionView, dateLabel, descriptionLabel])
+            let stackView = UIStackView(arrangedSubviews: [dateLabel, descriptionLabel, photosCollectionView])
             stackView.axis = .vertical
             stackView.spacing = 10
             stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -75,7 +75,6 @@ class MainBoardTableViewCell: UITableViewCell {
         ])
     }
 
-
 }
 extension MainBoardTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -89,9 +88,11 @@ extension MainBoardTableViewCell: UICollectionViewDataSource, UICollectionViewDe
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let height: CGFloat = 200
-        let width = collectionView.bounds.width
-        return CGSize(width: width, height: height)
+        let image = UIImage(named: photos[indexPath.item])!
+        let aspectRatio = image.size.height/image.size.width
+        let width: CGFloat = (photosCollectionView.frame.width-10)/2
+        let height: CGFloat = width * aspectRatio
+        return CGSize(width:width, height: height)
     }
 }
 
