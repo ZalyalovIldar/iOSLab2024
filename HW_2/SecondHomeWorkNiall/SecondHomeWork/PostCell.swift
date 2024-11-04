@@ -21,13 +21,13 @@ class PostCell: UITableViewCell{
     private lazy var picturesCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 10
+        layout.minimumInteritemSpacing = 10
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.isPagingEnabled = true
+        collectionView.isUserInteractionEnabled = false
         return collectionView
     }()
     
@@ -38,7 +38,7 @@ class PostCell: UITableViewCell{
     
     private func setupLayout() {
         let mainStackView: UIStackView = {
-            let stackView = UIStackView(arrangedSubviews: [picturesCollectionView, dateLabel, descriptLabel])
+            let stackView = UIStackView(arrangedSubviews: [dateLabel, descriptLabel, picturesCollectionView])
             stackView.translatesAutoresizingMaskIntoConstraints = false
             stackView.axis = .vertical
             stackView.spacing = 5
@@ -47,15 +47,12 @@ class PostCell: UITableViewCell{
         
         contentView.addSubview(mainStackView)
         NSLayoutConstraint.activate([
-            mainStackView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            mainStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            mainStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            mainStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            
-            picturesCollectionView.heightAnchor.constraint(equalToConstant: 150),
-            picturesCollectionView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            mainStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            mainStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            mainStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
+            mainStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            picturesCollectionView.heightAnchor.constraint(equalToConstant: 200),
             dateLabel.heightAnchor.constraint(equalToConstant: 20),
-            descriptLabel.heightAnchor.constraint(equalToConstant: 20)
         ])
     }
     
@@ -100,9 +97,8 @@ extension PostCell:  UICollectionViewDataSource, UICollectionViewDelegateFlowLay
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let postimage = UIImage(named: pictures[indexPath.item])!
         _ = postimage.size.height/postimage.size.width
-        let height: CGFloat = 150
-        let width = collectionView.bounds.width
-        
+        let width: CGFloat = (picturesCollectionView.frame.width-5)/2
+        let height: CGFloat = width * (postimage.size.height/postimage.size.width)
         return CGSize(width: width, height: height)
     }
     

@@ -8,7 +8,7 @@ class AddPictureCell: UICollectionViewCell {
     
     private let addButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "+"), for: .normal)
+        button.setImage(UIImage(systemName: "plus"), for: .normal)
         button.layer.cornerRadius = 8
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -26,8 +26,8 @@ class AddPictureCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             addButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             addButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            addButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 1),
-            addButton.heightAnchor.constraint(equalToConstant: 50)
+            addButton.widthAnchor.constraint(equalToConstant: 150),
+            addButton.heightAnchor.constraint(equalToConstant: 150)
         ])
     }
     
