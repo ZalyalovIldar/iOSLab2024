@@ -175,10 +175,9 @@ class PostsViewController: UIViewController {
                 snapshot.deleteItems([item])
                 snapshot.appendItems([updatePost], toSection: .main)
             } else {
-                snapshot.appendItems([updatePost], toSection: .main) // Убедитесь, что указали правильный раздел
+                snapshot.appendItems([updatePost], toSection: .main)
             }
             
-            // Применить изменения к datasource
             dataSource?.apply(snapshot, animatingDifferences: animated)
         }
     }

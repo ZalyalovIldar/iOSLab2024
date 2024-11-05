@@ -46,13 +46,11 @@ class DetailPhotoViewController: UIViewController {
         view.addSubview(image)
 
         NSLayoutConstraint.activate([
-            // Ограничения для кнопки, чтобы она занимала весь экран
             button.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             button.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             button.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             button.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
 
-            // Ограничения для изображения внутри кнопки
             image.centerXAnchor.constraint(equalTo: button.centerXAnchor),
             image.centerYAnchor.constraint(equalTo: button.centerYAnchor),
             image.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height / 2),
