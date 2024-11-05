@@ -89,6 +89,8 @@ class PostTableViewCell: UITableViewCell {
         }
     }
     
+    var pushDetailPhotoView: ((UIImage) -> Void)?
+    
     // MARK: - Initializers
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -221,5 +223,13 @@ extension PostTableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         whiteView.backgroundColor = selected ? .systemGray4 : .white
+    }
+}
+
+extension PostTableViewCell {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let photo = dataSourceCollection?.itemIdentifier(for: indexPath){
+            self.pushDetailPhotoView?(photo)
+        }
     }
 }

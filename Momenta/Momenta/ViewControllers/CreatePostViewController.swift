@@ -157,6 +157,7 @@ class CreatePostViewController: UIViewController {
     
     init(post: Post) {
         super.init(nibName: nil, bundle: nil)
+        self.currentPost = post
         self.titleTextView.text = post.title
         self.messageTextView.text = post.text
         self.postDate = post.date

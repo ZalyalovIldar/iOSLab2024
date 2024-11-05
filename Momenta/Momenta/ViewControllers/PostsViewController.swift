@@ -1,5 +1,5 @@
 //
-//  PersonalPostsViewController.swift
+//  PostsViewController.swift
 //  Momenta
 //
 //  Created by Тагир Файрушин on 15.10.2024.
@@ -128,6 +128,11 @@ class PostsViewController: UIViewController {
         dataSource = UITableViewDiffableDataSource(tableView: tableView, cellProvider: { tableView, indexPath, post in
             let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.reuseIdentifier, for: indexPath) as! PostTableViewCell
             cell.configureCell(with: post)
+            cell.pushDetailPhotoView = { image in
+                let detailPhotoVC = DetailPhotoViewController(photo: image)
+                detailPhotoVC.modalTransitionStyle = .crossDissolve
+                self.present(detailPhotoVC, animated: true)
+            }
             cell.selectionStyle = .none
             return cell
         })
@@ -140,7 +145,7 @@ class PostsViewController: UIViewController {
         snapshot.appendItems(posts)
         dataSource?.apply(snapshot,animatingDifferences: animation)
     }
-
+    
     private func addPost(post: Post, animated: Bool) {
         posts.append(post)
         if var snapshot = dataSource?.snapshot() {
@@ -161,13 +166,23 @@ class PostsViewController: UIViewController {
     }
     
     private func updatePost(updatePost: Post, animated: Bool) {
-        guard let indexObject = posts.firstIndex(where: {$0.id == updatePost.id}) else { return }
+        guard let indexObject = posts.firstIndex(where: { $0.id == updatePost.id }) else { return }
+        
         posts[indexObject] = updatePost
+
         if var snapshot = dataSource?.snapshot() {
-            snapshot.reloadItems([updatePost])
+            if let item = snapshot.itemIdentifiers.first(where: { $0.id == updatePost.id }) {
+                snapshot.deleteItems([item])
+                snapshot.appendItems([updatePost], toSection: .main)
+            } else {
+                snapshot.appendItems([updatePost], toSection: .main) // Убедитесь, что указали правильный раздел
+            }
+            
+            // Применить изменения к datasource
             dataSource?.apply(snapshot, animatingDifferences: animated)
         }
     }
+    
     
     // MARK: - Setup NavigationBar
     
