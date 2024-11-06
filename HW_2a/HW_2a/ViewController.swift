@@ -4,21 +4,14 @@
 //
 //  Created by Артур Мавликаев on 27.10.2024.
 //
+
+
 import UIKit
 
-enum Section {
-    case main
-}
-
-struct PostItem: Hashable {
-    let post: Post
-    let id = UUID() 
-}
-
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+final class ViewController: UIViewController, UITableViewDelegate {
     private var posts: [Post] = [
         Post(id: UUID(), date: Date(), text: "Первый пост с фото", images: [UIImage(named: "1")!, UIImage(named: "2")!, UIImage(named: "3")!]),
-        Post(id: UUID(), date: Date(), text: "Пост без фото", images: [])
+        Post(id: UUID(), date: Date(), text: "Пост без фото", images: nil)
     ]
 
     private var dataSource: UITableViewDiffableDataSource<Section, PostItem>!
@@ -32,21 +25,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return table
     }()
 
-    private lazy var addButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Добавить пост", for: .normal)
-        button.addTarget(self, action: #selector(addPost), for: .touchUpInside)
-        return button
-    }()
-
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(tableView)
-        view.addSubview(addButton)
         setupTableView()
-        setupButton()
         configureDataSource()
         setupData()
+        navigationItem.title = "Моменты"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addPost))
     }
 
     private func configureDataSource() {
@@ -67,14 +53,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         ])
     }
 
-    private func setupButton() {
-        addButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            addButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            addButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        ])
-    }
-
     private func setupData() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, PostItem>()
         snapshot.appendSections([.main])
@@ -82,52 +60,50 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         snapshot.appendItems(postItems)
         dataSource.apply(snapshot, animatingDifferences: true)
     }
-    
+
     @objc private func addPost() {
         let editVC = EditPostViewController()
-        editVC.delegate = self
-        editVC.post = nil
+        editVC.completion = { [weak self] newPost in
+            guard let self = self else { return }
+            self.posts.append(newPost)
+            self.setupData()
+        }
         navigationController?.pushViewController(editVC, animated: true)
-    }
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return posts.count
-    }
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let postItem = PostItem(post: posts[indexPath.row])
-        let cell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.identifier, for: indexPath) as! PostTableViewCell
-        cell.configure(with: postItem.post)
-        return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let editVC = EditPostViewController()
-        editVC.delegate = self
-        editVC.post = posts[indexPath.row]
-        editVC.index = indexPath.row
-        navigationController?.pushViewController(editVC, animated: true)
+        let detailVC = DetailPostViewController()
+        detailVC.post = posts[indexPath.row]
+        detailVC.updatePostClosure = { [weak self] updatedPost in
+            guard let self = self else { return }
+            self.posts[indexPath.row] = updatedPost
+            self.setupData()
+        }
+        detailVC.deletePostClosure = { [weak self] in
+            guard let self = self else { return }
+            self.posts.remove(at: indexPath.row)
+            self.setupData()
+        }
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+
         let deleteAction = UIContextualAction(style: .destructive, title: "Удалить") { [weak self] (action, view, completionHandler) in
             guard let self = self else { return }
-            let postItemToDelete = self.posts[indexPath.row]
             self.posts.remove(at: indexPath.row)
-            var snapshot = self.dataSource.snapshot()
-            snapshot.deleteItems([PostItem(post: postItemToDelete)])
-            self.dataSource.apply(snapshot, animatingDifferences: true)
+            self.setupData()
             completionHandler(true)
         }
         return UISwipeActionsConfiguration(actions: [deleteAction])
     }
 }
 
-extension ViewController: EditPostDelegate {
-    func didUpdatePost(_ post: Post, at index: Int?) {
-        if let index = index {
-            posts[index] = post
-        } else {
-            posts.append(post)
-        }
-        setupData()
-    }
+enum Section {
+    case main
+}
+
+struct PostItem: Hashable {
+    let post: Post
+    let id = UUID()
 }
