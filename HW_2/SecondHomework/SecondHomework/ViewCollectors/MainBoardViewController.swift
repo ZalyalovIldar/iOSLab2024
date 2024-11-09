@@ -1,6 +1,6 @@
 import UIKit
 
-class MainBoardViewController: UIViewController, MainBoardDelegate{
+class MainBoardViewController: UIViewController, MainBoardDelegate {
     
     var posts: [Post] = []
     var dataSource: UITableViewDiffableDataSource<Int, Post>!
@@ -10,7 +10,6 @@ class MainBoardViewController: UIViewController, MainBoardDelegate{
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,16 +23,16 @@ class MainBoardViewController: UIViewController, MainBoardDelegate{
         setupLayout()
         setupNavigationBar()
         updateDataSource(with: posts)
-        
     }
     
-    private func setDate() -> String{
+    private func setDate() -> String {
         let currentDate = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd/MM/yyyy HH:mm"
         let dateString = dateFormatter.string(from: currentDate)
         return dateString
     }
+    
     func setupDataSource() {
         dataSource = UITableViewDiffableDataSource<Int, Post>(tableView: tableView) { (tableView, indexPath, post) -> UITableViewCell? in
             let cell = tableView.dequeueReusableCell(withIdentifier: MainBoardTableViewCell.reuseIdentifier, for: indexPath) as! MainBoardTableViewCell
@@ -42,12 +41,14 @@ class MainBoardViewController: UIViewController, MainBoardDelegate{
         }
         updateDataSource(with: posts)
     }
+    
     func updateDataSource(with posts: [Post]) {
         var snapshot = NSDiffableDataSourceSnapshot<Int, Post>()
         snapshot.appendSections([0])
         snapshot.appendItems(posts)
         dataSource?.apply(snapshot, animatingDifferences: true)
     }
+    
     @objc func addButtonTapped() {
         let addVC = AddViewController()
         addVC.onSave = { [weak self] post in
@@ -56,15 +57,18 @@ class MainBoardViewController: UIViewController, MainBoardDelegate{
         let navigationController = UINavigationController(rootViewController: addVC)
         present(navigationController, animated: true, completion: nil)
     }
+    
     func handleNewPost(_ post: Post) {
         posts.append(post)
         updateDataSource(with: posts)
     }
+    
     func setupNavigationBar() {
         navigationItem.title = "Posts"
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped))
         updateDataSource(with: [Post(date: setDate(), description: "", pictures: [], id: UUID())])
     }
+    
     func setupLayout() {
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
@@ -81,16 +85,16 @@ class MainBoardViewController: UIViewController, MainBoardDelegate{
             updateDataSource(with: posts)
         }
     }
+    
     func didUpdatePost(_ post: Post) {
         if let index = posts.firstIndex(where: { $0.id == post.id }) {
             posts[index] = post
             updateDataSource(with: posts)
         }
     }
-
-
 }
-extension MainBoardViewController: UITableViewDelegate{
+
+extension MainBoardViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedPost = posts[indexPath.row]
         let detailVC = DetailsViewController()

@@ -1,6 +1,6 @@
 import Foundation
 import UIKit
-struct Post: Hashable, Identifiable{
+struct Post: Hashable, Identifiable {
     let date: String
     var description: String
     var pictures: [String]

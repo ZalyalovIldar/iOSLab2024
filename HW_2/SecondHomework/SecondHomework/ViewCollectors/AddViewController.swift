@@ -9,12 +9,14 @@ class AddViewController: UIViewController {
     
     private lazy var postTextView: UITextView = {
         let textField = UITextView()
-        textField.text = "Текст"
+        textField.text = "Введите текст"
+        textField.textColor = .lightGray
         textField.font = UIFont.systemFont(ofSize: 16)
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.layer.borderColor = UIColor.lightGray.cgColor
         textField.layer.borderWidth = 1
         textField.layer.cornerRadius = 5
+        textField.delegate = self
         return textField
     }()
     
@@ -32,7 +34,6 @@ class AddViewController: UIViewController {
         collectionView.dataSource = self
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
         collectionView.addGestureRecognizer(longPressGesture)
-
         return collectionView
     }()
     
@@ -46,7 +47,10 @@ class AddViewController: UIViewController {
         }
     }
     
-    func configureData(with post: Post){
+    func configureData(with post: Post) {
+        if !post.description.isEmpty {
+            postTextView.textColor = .black
+        }
         postTextView.text = post.description
         photos = post.pictures
         selectedImages = []
@@ -84,7 +88,16 @@ class AddViewController: UIViewController {
     }
     
     @objc func savePost() {
-        guard let description = postTextView.text, !description.isEmpty || !photos.isEmpty else { return }
+        if postTextView.text == "Введите текст"{
+            postTextView.text = ""
+        }
+        guard let description = postTextView.text, !description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty  || !photos.isEmpty else {
+            let alert = UIAlertController(title: "Пустой пост", message: "Сохранение невозможно", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "ОК", style: .cancel, handler: nil))
+            present(alert, animated: true, completion: nil)
+            postTextView.text = "Введите текст"
+            postTextView.textColor = .lightGray
+            return }
         let picturePaths = selectedImages.map { image in
             saveImageAndReturnPath(image)}
         photos += picturePaths
@@ -97,6 +110,7 @@ class AddViewController: UIViewController {
         onSave?(updatedPost)
         dismiss(animated: true, completion: nil)
     }
+    
     func saveImageAndReturnPath(_ image: UIImage) -> String {
         guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
             return ""
@@ -112,19 +126,21 @@ class AddViewController: UIViewController {
                 print("Ошибка при сохранении изображения: (error.localizedDescription)")
             }
         }
-        
         return ""
     }
-    private func setDate() -> String{
+    
+    private func setDate() -> String {
         let currentDate = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd/MM/yyyy HH:mm"
         let dateString = dateFormatter.string(from: currentDate)
         return dateString
     }
+    
     @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
         let location = gesture.location(in: photosCollectionView)
         guard let indexPath = photosCollectionView.indexPathForItem(at: location) else { return }
+        if photosCollectionView.cellForItem(at: indexPath)?.reuseIdentifier == AddPhotoCell.reuseIdentifier  { return }
 
         if gesture.state == .began {
             let alert = UIAlertController(title: "Удалить фото?", message: "Вы уверены, что хотите удалить это фото?", preferredStyle: .alert)
@@ -135,6 +151,7 @@ class AddViewController: UIViewController {
             present(alert, animated: true, completion: nil)
         }
     }
+    
     private func deletePhoto(at indexPath: IndexPath) {
         photos.remove(at: indexPath.item)
         photosCollectionView.reloadData()
@@ -224,3 +241,18 @@ class AddPhotoCell: UICollectionViewCell {
         addPhotoAction?()
     }
 }
+extension AddViewController: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView == postTextView && textView.text == "Введите текст" || textView.text == ""{
+            textView.text = ""
+            textView.textColor = .black
+        }
+    }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView == postTextView && textView.text.isEmpty {
+            textView.text = "Введите текст"
+            textView.textColor = .lightGray
+        }
+    }
+}
+

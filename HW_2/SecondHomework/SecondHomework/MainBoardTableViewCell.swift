@@ -12,6 +12,7 @@ class MainBoardTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 5
@@ -20,6 +21,7 @@ class MainBoardTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
     private lazy var photosCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -33,14 +35,17 @@ class MainBoardTableViewCell: UITableViewCell {
         collectionView.delegate = self
         return collectionView
     }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         photosCollectionView.register(PhotoCell.self, forCellWithReuseIdentifier: PhotoCell.reuseIdentifier)
         setupLayout()
     }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         dateLabel.text = nil
@@ -49,17 +54,20 @@ class MainBoardTableViewCell: UITableViewCell {
         photosCollectionView.reloadData()
     }
 
-    func configureCell(with post: Post){
+    func configureCell(with post: Post) {
         dateLabel.text = post.date
         descriptionLabel.text = post.description
         photos = post.pictures
+        setHeight()
         photosCollectionView.reloadData()
     }
+    
     private func setupLayout() {
         let mainStackView: UIStackView = {
             let stackView = UIStackView(arrangedSubviews: [dateLabel, descriptionLabel, photosCollectionView])
             stackView.axis = .vertical
             stackView.spacing = 10
+            stackView.distribution = .fill
             stackView.translatesAutoresizingMaskIntoConstraints = false
             return stackView
         }()
@@ -70,15 +78,26 @@ class MainBoardTableViewCell: UITableViewCell {
             mainStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             mainStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
             mainStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            photosCollectionView.heightAnchor.constraint(equalToConstant: 200),
-            dateLabel.heightAnchor.constraint(equalToConstant: 20),
         ])
     }
-
+    
+    private func setHeight() {
+        photosCollectionView.heightAnchor.constraint(equalToConstant: photos.isEmpty ? 0 : 150).isActive = true
+        if descriptionLabel.text == ""{
+            descriptionLabel.heightAnchor.constraint(equalToConstant: 0).isActive = true}
+        else{
+            descriptionLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 40).isActive = true}
+    }
 }
+
 extension MainBoardTableViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return photos.count
+        if photos.count > 1 {
+            return 2
+        }
+        else {
+            return 1
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -90,12 +109,14 @@ extension MainBoardTableViewCell: UICollectionViewDataSource, UICollectionViewDe
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let image = UIImage(named: photos[indexPath.item])!
         let aspectRatio = image.size.height/image.size.width
-        let width: CGFloat = (photosCollectionView.frame.width-10)/2
-        let height: CGFloat = width * aspectRatio
+        let width: CGFloat = collectionView.bounds.width/2
+        var height: CGFloat = aspectRatio * width
+        if height > collectionView.bounds.height {
+            height = collectionView.bounds.height
+        }
         return CGSize(width:width, height: height)
     }
 }
-
 
 class PhotoCell: UICollectionViewCell {
     static var reuseIdentifier: String {
@@ -104,7 +125,7 @@ class PhotoCell: UICollectionViewCell {
     
     let imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
