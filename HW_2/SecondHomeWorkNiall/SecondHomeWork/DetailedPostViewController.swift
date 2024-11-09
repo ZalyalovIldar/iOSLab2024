@@ -23,11 +23,9 @@ class DetailedPostViewController: UIViewController {
     
     private lazy var photoCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
         layout.collectionView?.isPagingEnabled = false
         layout.minimumLineSpacing = 10
         layout.minimumInteritemSpacing = 10
-        layout.itemSize = CGSize(width: 200, height: 200)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(PictureCell.self, forCellWithReuseIdentifier: PictureCell.reuseIdentifier)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -57,44 +55,83 @@ class DetailedPostViewController: UIViewController {
         postDescription.text = post.text
         pictures = post.pictures
         photoCollectionView.reloadData()
+        updateContentVisibility()
+        setupHeight()
     }
     
     private func setupLayout() {
-                let scrollView = UIScrollView()
-                scrollView.translatesAutoresizingMaskIntoConstraints = false
-                let stackView = UIStackView()
-                stackView.axis = .vertical
-                stackView.spacing = 0
-                stackView.translatesAutoresizingMaskIntoConstraints = false
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        stackView.translatesAutoresizingMaskIntoConstraints = false
 
-                view.addSubview(scrollView)
-                let contentView: UIStackView = {
-                    let stackView = UIStackView(arrangedSubviews: [photoCollectionView, postDescription, deleteButton])
-                    stackView.translatesAutoresizingMaskIntoConstraints = false
-                    stackView.axis = .vertical
-                    stackView.spacing = 0
-                    return stackView
-                }()
-                scrollView.addSubview(contentView)
-
-                NSLayoutConstraint.activate([
-                    scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-                    scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-                    scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                    scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-
-                    
-                    contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-                    contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-                    contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 10),
-                    contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: 10),
-                    contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-                    photoCollectionView.heightAnchor.constraint(equalToConstant: 300),
-                    deleteButton.heightAnchor.constraint(equalToConstant: 40),
-                ])
+        view.addSubview(scrollView)
+        let contentView: UIStackView = {
+            let stackView = UIStackView(arrangedSubviews: [postDescription, deleteButton])
+            stackView.axis = .vertical
+            stackView.spacing = 10
+            stackView.translatesAutoresizingMaskIntoConstraints = false
+            return stackView
+        }()
+        scrollView.addSubview(photoCollectionView)
+        scrollView.addSubview(contentView)
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
             
-
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            
+            photoCollectionView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            photoCollectionView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            photoCollectionView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.topAnchor.constraint(equalTo: photoCollectionView.bottomAnchor, constant: 10),
+            
+            deleteButton.heightAnchor.constraint(equalToConstant: 40),
+                ])
     }
+    
+    private func updateContentVisibility() {
+        if let stackView = (view.subviews.first?.subviews.first as? UIStackView) {
+            stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+            if !pictures.isEmpty {
+                stackView.addArrangedSubview(photoCollectionView)
+            }
+            if let descriptionText = postDescription.text, !descriptionText.isEmpty {
+                stackView.addArrangedSubview(postDescription)
+            }
+            
+            stackView.addArrangedSubview(deleteButton)
+        }
+    }
+    
+    func setupHeight() {
+            var height: CGFloat
+            switch pictures.count {
+            case 1:
+                height = 200
+                photoCollectionView.heightAnchor.constraint(equalToConstant: height).isActive = true
+            case 2:
+                height = 200
+                photoCollectionView.heightAnchor.constraint(equalToConstant: height).isActive = true
+            case 3:
+                height = 600
+                photoCollectionView.heightAnchor.constraint(greaterThanOrEqualToConstant: height).isActive = true
+            case 4:
+                height = 400
+                photoCollectionView.heightAnchor.constraint(greaterThanOrEqualToConstant: height).isActive = true
+            default:
+                height = 0
+                photoCollectionView.heightAnchor.constraint(equalToConstant: height).isActive = true
+            }
+        }
+
     
     func setupNavigationBar() {
         navigationItem.title = "Детали"
@@ -112,6 +149,7 @@ class DetailedPostViewController: UIViewController {
             self?.post = updatedPost
             self?.configureData(with: updatedPost)
             self?.delegate?.didUpdatePost(updatedPost)
+            self?.setupHeight()
             self?.navigationController?.popViewController(animated: true)
         }
         let navigationController = UINavigationController(rootViewController: addPostCreationVC)
@@ -141,7 +179,6 @@ class DetailedPostViewController: UIViewController {
 }
 
 extension DetailedPostViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return pictures.count
     }
@@ -155,21 +192,12 @@ extension DetailedPostViewController: UICollectionViewDataSource, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if pictures.count == 1 {
             return CGSize(width: 200, height: 200)
-        }
-        else if ((pictures.count % 2 == 1) && (indexPath.item == pictures.count-1)){
-            let image = UIImage(named: pictures[indexPath.item])!
-            let aspectRatio = image.size.height/image.size.width
-            let width: CGFloat = photoCollectionView.frame.width/2
-            let height: CGFloat = width * aspectRatio
-            return CGSize(width: width, height: height)
-        }
-        else {
-            let image = UIImage(named: pictures[indexPath.item])!
-            let aspectRatio = image.size.height/image.size.width
-            let width: CGFloat = (photoCollectionView.frame.width)/2
-            let height: CGFloat = width * aspectRatio
-            return CGSize(width:width, height: height)
+        }else if pictures.count % 2 == 1 && indexPath.item == pictures.count-1{
+            let width: CGFloat = photoCollectionView.frame.width
+            return CGSize(width: width, height: 400)
+        }else {
+            let width: CGFloat = (photoCollectionView.frame.width - 10)/2
+            return CGSize(width: width, height: 200)
         }
     }
 }
-
