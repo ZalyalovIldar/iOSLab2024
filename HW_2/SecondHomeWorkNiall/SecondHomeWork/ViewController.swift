@@ -14,7 +14,7 @@ class ViewController: UIViewController, PostSelectionDelegate {
     lazy var postsTableView: UITableView = {
         let table = UITableView()
         table.translatesAutoresizingMaskIntoConstraints = false
-        table.separatorStyle = .none
+        table.separatorStyle = .singleLine
         table.delegate = self
         table.register(PostCell.self, forCellReuseIdentifier: PostCell.reuseIdentifier)
         return table

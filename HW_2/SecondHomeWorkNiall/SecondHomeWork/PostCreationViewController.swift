@@ -15,6 +15,7 @@ class PostCreationViewController: UIViewController {
         textField.layer.borderColor = UIColor.gray.cgColor
         textField.layer.borderWidth = 2.0
         textField.layer.cornerRadius = 2.0
+        textField.delegate = self
         return textField
     }()
     
@@ -40,7 +41,7 @@ class PostCreationViewController: UIViewController {
         setupCreatingView()
         setupLayout()
         setupNavigationBar()
-        if post != nil {
+        if (post?.pictures != nil || post?.text != nil) {
             configureCell(with: post!)
         }
     }
@@ -113,14 +114,24 @@ class PostCreationViewController: UIViewController {
     }
     
     @objc func savePost() {
-        guard let description = postTextView.text, !description.isEmpty else { return }
-        let picturePaths = picSelect.map { image in
-            savePictureAndPath(image)}
-        pictures = pictures + picturePaths
+        if postTextView.text == "Введите текст"{
+            postTextView.text = ""
+        }
+        guard let description = postTextView.text, !description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty  || !pictures.isEmpty else {
+            let alert = UIAlertController(title: "Пустой пост", message: "Нельзя сохранить", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ок", style: .cancel, handler: nil))
+            present(alert, animated: true, completion: nil)
+            postTextView.text = "Введите текст"
+            postTextView.textColor = .lightGray
+            return }
+        let picturePaths = picSelect.map { image in savePictureAndPath(image)}
+        pictures += picturePaths
         let updatedPost: Post
-        if let postID = post?.id{
-            updatedPost = Post(text: description, date: setDate(), pictures: pictures, id: postID)
-        } else { updatedPost = Post(text: description, date: setDate(), pictures: pictures, id: UUID())
+        
+        if let postId = post?.id {
+            updatedPost = Post(text: description, date: setDate(), pictures: pictures, id: postId)
+        } else {
+            updatedPost = Post(text: description, date: setDate(), pictures: pictures, id: UUID())
         }
         didPostCreated?(updatedPost)
         dismiss(animated: true, completion: nil)
@@ -129,7 +140,7 @@ class PostCreationViewController: UIViewController {
     @objc private func handleHolding(_ gesture: UILongPressGestureRecognizer) {
         let location = gesture.location(in: picturesCollectionView)
         guard let indexPath = picturesCollectionView.indexPathForItem(at: location) else { return }
-
+        
         if gesture.state == .began {
             let alert = UIAlertController(title: "Удалить фото?", message: "Вы уверены, что хотите удалить данное фото?", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: nil))
@@ -195,3 +206,19 @@ extension PostCreationViewController: UICollectionViewDelegate, UICollectionView
         present(picker, animated: true, completion: nil)
     }
 }
+
+extension PostCreationViewController: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView == postTextView && textView.text == "Введите текст" {
+            textView.text = ""
+            textView.textColor = .black
+        }
+    }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView == postTextView && textView.text.isEmpty {
+            textView.text = "Введите текст"
+            textView.textColor = .lightGray
+        }
+    }
+}
+

@@ -41,7 +41,8 @@ class PostCell: UITableViewCell{
             let stackView = UIStackView(arrangedSubviews: [dateLabel, descriptLabel, picturesCollectionView])
             stackView.translatesAutoresizingMaskIntoConstraints = false
             stackView.axis = .vertical
-            stackView.spacing = 5
+            stackView.spacing = 10
+            stackView.distribution = .fill
             return stackView
         }()
         
@@ -60,6 +61,7 @@ class PostCell: UITableViewCell{
         dateLabel.text = post.date
         descriptLabel.text = post.text
         pictures = post.pictures
+        setCollectionHeight()
         picturesCollectionView.reloadData()
     }
 
@@ -80,7 +82,15 @@ class PostCell: UITableViewCell{
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
+    private func setCollectionHeight(){
+        if pictures.count > 0 {
+            picturesCollectionView.heightAnchor.constraint(equalToConstant: 150).isActive = true
+        } else {
+            picturesCollectionView.heightAnchor.constraint(equalToConstant: 0).isActive = true
+        }
+    }
+    
 }
 
 extension PostCell:  UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
@@ -95,11 +105,10 @@ extension PostCell:  UICollectionViewDataSource, UICollectionViewDelegateFlowLay
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let postimage = UIImage(named: pictures[indexPath.item])!
-        _ = postimage.size.height/postimage.size.width
-        let width: CGFloat = (picturesCollectionView.frame.width-5)/2
-        let height: CGFloat = width * (postimage.size.height/postimage.size.width)
-        return CGSize(width: width, height: height)
+        let image = UIImage(named: pictures[indexPath.item])!
+        let aspectRatio = image.size.height/image.size.width
+        let width: CGFloat = (picturesCollectionView.frame.width-10)/2
+        let height: CGFloat = width * aspectRatio
+        return CGSize(width:width, height: height)
     }
-    
 }
