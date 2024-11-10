@@ -139,7 +139,7 @@ class MomentTableViewCell: UITableViewCell {
     // MARK: - Configuration
 
     func configureCell(with post: Post) {
-        dateLabel.text = post.date.formatted(date: .complete, time: .shortened)
+        dateLabel.text = post.date.formatted(date: .numeric, time: .shortened)
         descriptionLabel.text = post.text
         photos = post.photos
         titleLabel.text = post.title
