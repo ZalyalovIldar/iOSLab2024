@@ -183,7 +183,7 @@ class DetailViewController: UIViewController {
     private func configureView() {
         guard let postData = post else { return }
         photos = postData.photos
-        dateLabel.text = postData.date.formatted(date: .complete, time: .shortened)
+        dateLabel.text = postData.date.formatted(date: .numeric, time: .shortened)
         descriptionLabel.text = postData.text
         titleString = postData.title
     }
