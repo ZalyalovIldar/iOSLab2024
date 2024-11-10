@@ -10,7 +10,7 @@ import UIKit
 class CreateViewController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
     
     // MARK: - Properties
-    
+    private let constraintConstant: CGFloat = 10
     private var photos: [UIImage] = []
     private var addButton: UIButton?
     private let maxPhoto = 4
@@ -90,7 +90,6 @@ class CreateViewController: UIViewController, UIImagePickerControllerDelegate & 
     // MARK: - Setup UI
     
     private func setupUI() {
-        let constraintConstant: CGFloat = 10
         view.addSubview(titleLabel)
         view.addSubview(photoTitleLabel)
         view.addSubview(imageCollectionView)
