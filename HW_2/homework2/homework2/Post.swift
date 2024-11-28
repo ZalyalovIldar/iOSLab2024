@@ -6,3 +6,13 @@
 //
 
 import Foundation
+import UIKit
+
+struct Post:Hashable,Identifiable{
+    let id:UUID = UUID()
+    var text: String
+    var date: Date
+    var images: [UIImage?]
+}
+
+

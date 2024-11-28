@@ -11,6 +11,7 @@ class PostDetailViewController: UIViewController {
     
     var post: Post!
     weak var delegate: CreatePostDelegate?
+    var index: Int?
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -149,11 +150,10 @@ class PostDetailViewController: UIViewController {
     }
     
     @objc private func editPost() {
-        let editVC = CreatePostViewController()
-        editVC.postToEdit = post
-        editVC.delegate = delegate
-        editVC.textView.text = post.text
-        editVC.selectedImages = post.images
-        navigationController?.pushViewController(editVC, animated: true)
+        let editPostVC = EditPostViewController()
+        editPostVC.postToEdit = post
+        editPostVC.postIndex = index
+        editPostVC.delegate = self.delegate as? any EditPostDelegate
+        navigationController?.pushViewController(editPostVC, animated: true)
     }
 }
