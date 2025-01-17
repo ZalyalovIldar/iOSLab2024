@@ -64,7 +64,7 @@ class FavouriteFilmsCell: UITableViewCell {
         if let imageData = Data(base64Encoded: film.poster.image) {
             moviePoster.image = UIImage(data: imageData)
         } else {
-            moviePoster.image = UIImage(named: "photo")
+            moviePoster.image = .fail
         }
         movieName.text = film.title
         movieRating.setRating(rating: film.rating)

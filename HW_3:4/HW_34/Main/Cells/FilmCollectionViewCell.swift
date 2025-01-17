@@ -76,7 +76,7 @@ class FilmCollectionViewCell: UICollectionViewCell {
                 } catch {
                     if !Task.isCancelled {
                         self.activityIndicator.stopAnimating()
-                        filmPoster.image = UIImage(named: "photo")
+                        filmPoster.image = .fail
                     }
                 }
             }
@@ -97,7 +97,7 @@ class FilmCollectionViewCell: UICollectionViewCell {
             } catch {
                 if !Task.isCancelled {
                     self.activityIndicator.stopAnimating()
-                    filmPoster.image = UIImage(named: "photo")
+                    filmPoster.image = .fail
                 }
             }
         }
@@ -132,7 +132,7 @@ class FilmCollectionViewCell: UICollectionViewCell {
                 } catch {
                     if !Task.isCancelled {
                         self.activityIndicator.stopAnimating()
-                        filmPoster.image = UIImage(named: "photo")
+                        filmPoster.image = .fail
                     }
                 }
             }

@@ -179,7 +179,7 @@ class FilmDetailView: UIView {
                 filmPoster.image = image
             } catch {
                 activityIndicator.stopAnimating()
-                filmPoster.image = UIImage(named: "photo")
+                filmPoster.image = .fail
                 print("Error during loading \(film.title) avatar image: \(error.localizedDescription)")
             }
         }

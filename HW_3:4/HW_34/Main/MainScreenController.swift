@@ -72,6 +72,15 @@ class MainScreenController: UIViewController {
         let view = CustomTitle()
         view.setupWithTitle(title: "Что вы хотите посмотреть?")
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: view)
+        
+        let hideButton = UIButton()
+        hideButton.setImage(UIImage(systemName: "eye.slash.fill"), for: .normal)
+        hideButton.tintColor = .white
+        hideButton.addAction(UIAction { _ in
+            self.mainScreenView.endEditing(true)
+        }, for: .touchUpInside)
+        let hideKeyBoardButton = UIBarButtonItem(customView: hideButton)
+        navigationItem.rightBarButtonItem = hideKeyBoardButton
     }
     
     private func loadData() {

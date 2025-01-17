@@ -38,7 +38,7 @@ class FilmImageCell: UICollectionViewCell {
             } catch {
                 print("Error of loading image on film: \(error.localizedDescription)")
                 activity.stopAnimating()
-                filmPoster.image = UIImage(named: "photo")
+                filmPoster.image = .fail
             }
         }
     }
