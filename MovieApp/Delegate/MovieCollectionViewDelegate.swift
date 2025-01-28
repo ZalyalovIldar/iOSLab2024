@@ -1,10 +1,3 @@
-//
-//  FilmCollectionViewDelegate.swift
-//  MovieApp
-//
-//  Created by Anna on 28.01.2025.
-//
-
 import Foundation
 import UIKit
 
@@ -15,14 +8,14 @@ protocol TappedOnMovieDelegate: AnyObject {
 class MovieCollectionViewDelegate: NSObject, UICollectionViewDelegate {
     private weak var delegate: TappedOnMovieDelegate?
     
-    init(didTapOnFilmDelegate: TappedOnMovieDelegate) {
-        self.delegate = didTapOnFilmDelegate
+    init(tappedOnMovieDelegate: TappedOnMovieDelegate) {
+        self.delegate = tappedOnMovieDelegate
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) else { return }
         
-        if let dataSource = collectionView.dataSource as? UICollectionViewDiffableDataSource<CollectionViewSections, Film> {
+        if let dataSource = collectionView.dataSource as? UICollectionViewDiffableDataSource<CollectionViewSections, Movie> {
             UIView.animate(withDuration: 0.125, animations: {
                 cell.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
             }) { isFinished in
@@ -30,8 +23,8 @@ class MovieCollectionViewDelegate: NSObject, UICollectionViewDelegate {
                     UIView.animate(withDuration: 0.125) {
                         cell.transform = .identity
                     } completion: { _ in
-                        if let filmId = dataSource.itemIdentifier(for: indexPath)?.id {
-                            self.delegate?.tappedOnMovie(withId: filmId)
+                        if let movieId = dataSource.itemIdentifier(for: indexPath)?.id {
+                            self.delegate?.tappedOnMovie(withId: movieId)
                         }
                     }
                 }

@@ -1,13 +1,6 @@
-//
-//  Film.swift
-//  MovieApp
-//
-//  Created by Anna on 28.01.2025.
-//
-
 import Foundation
 
-struct FilmResponce: Codable {
+struct MovieResponce: Codable {
     let results: [Movie]
 }
 
@@ -16,7 +9,6 @@ struct Movie: Codable, Hashable {
     let title: String
     let poster: Poster
     
-    /// Ускорение работы Hashable тк при работе с applySnapshot'ом diffableDataSource'а было долгое ожидание (2.8 секунд)
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
@@ -34,14 +26,14 @@ enum CollectionViewSections {
     case defaultFilms
 }
 
-struct FilmWithInfo: Codable {
+struct MovieWithInfo: Codable {
     
     let id: Int
     let title: String
     let description: String
     let year: Int
     let country: String
-    let images: [FilmImage]
+    let images: [MovieImage]
     let poster: Poster
     let rating: Double?
     let runningTime: Int?
@@ -63,7 +55,7 @@ struct FilmWithInfo: Codable {
     }
 }
 
-struct FilmImage: Codable {
+struct MovieImage: Codable {
     
     let image: String
 }

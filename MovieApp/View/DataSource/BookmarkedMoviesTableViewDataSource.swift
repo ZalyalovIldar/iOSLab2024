@@ -1,34 +1,27 @@
-//
-//  FavouriteFilmsTableViewDataSource.swift
-//  MovieApp
-//
-//  Created by Anna on 28.01.2025.
-//
-
 import Foundation
 import UIKit
 
 class BookmarkedMoviesTableViewDataSource: NSObject, UITableViewDataSource {
     
-    private var favFilms: [FavouriteFilm] = []
+    private var bookmarkedMovie: [BookmarkedMovie] = []
     
-    init(withFavFilms: [FavouriteFilm]) {
-        self.favFilms = withFavFilms
+    init(withFavFilms: [BookmarkedMovie]) {
+        self.bookmarkedMovie = withFavFilms
     }
     
-    func updateData(films: [FavouriteFilm]) {
-        self.favFilms = films
+    func updateData(movies: [BookmarkedMovie]) {
+        self.bookmarkedMovie = movies
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        favFilms.count
+        bookmarkedMovie.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: FavouriteFilmsTableViewCell.identifier, for: indexPath) as! FavouriteFilmsTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: BookmarkedMoviesTableViewCell.identifier, for: indexPath) as! BookmarkedMoviesTableViewCell
         
-        let currentFilm = favFilms[indexPath.item]
-        cell.setupWithFilm(currentFilm)
+        let currentMovie = bookmarkedMovie[indexPath.item]
+        cell.setupWithMovie(currentMovie)
         cell.isUserInteractionEnabled = false
         
         return cell

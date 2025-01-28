@@ -1,10 +1,3 @@
-//
-//  FilmImagesCollectionViewDataSource.swift
-//  MovieApp
-//
-//  Created by Anna on 28.01.2025.
-//
-
 import Foundation
 import UIKit
 
@@ -21,7 +14,7 @@ class MovieSnapsCollectionViewDataSource: NSObject, UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FilmImageCollectionViewCell.identifier, for: indexPath) as! FilmImageCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieSnapsCollectionViewCell.identifier, for: indexPath) as! MovieSnapsCollectionViewCell
         cell.setupWithImage(images[indexPath.item])
         return cell
     }

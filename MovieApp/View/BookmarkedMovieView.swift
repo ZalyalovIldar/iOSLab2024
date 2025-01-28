@@ -1,15 +1,8 @@
-//
-//  FavouriteFilmsView.swift
-//  MovieApp
-//
-//  Created by Anna on 28.01.2025.
-//
-
 import UIKit
 
 class BookmarkedMovieView: UIView, UITableViewDelegate {
     
-    private lazy var favouriteFilmsTableView: UITableView = {
+    private lazy var bookmarkedMovieTableView: UITableView = {
         let table = UITableView()
         table.translatesAutoresizingMaskIntoConstraints = false
         table.rowHeight = Constants.screenWidth / 2
@@ -31,21 +24,21 @@ class BookmarkedMovieView: UIView, UITableViewDelegate {
     }
     
     func reloadData() {
-        favouriteFilmsTableView.reloadData()
+        bookmarkedMovieTableView.reloadData()
     }
     
     func setDataSource(dataSource: BookmarkedMoviesTableViewDataSource) {
-        favouriteFilmsTableView.dataSource = dataSource
+        bookmarkedMovieTableView.dataSource = dataSource
     }
     
     private func setup() {
         self.backgroundColor = Colors.mainGray
-        addSubview(favouriteFilmsTableView)
+        addSubview(bookmarkedMovieTableView)
         NSLayoutConstraint.activate([
-            favouriteFilmsTableView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-            favouriteFilmsTableView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
-            favouriteFilmsTableView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-            favouriteFilmsTableView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
+            bookmarkedMovieTableView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
+            bookmarkedMovieTableView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
+            bookmarkedMovieTableView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
+            bookmarkedMovieTableView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
         ])
     }
 }

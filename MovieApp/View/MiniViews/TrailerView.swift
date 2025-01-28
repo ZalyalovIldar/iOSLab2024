@@ -1,10 +1,3 @@
-//
-//  PlayTrailerView.swift
-//  MovieApp
-//
-//  Created by Anna on 28.01.2025.
-//
-
 import UIKit
 
 class TrailerView: UIView {
@@ -41,7 +34,7 @@ class TrailerView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = Constants.ultraTiny
         view.clipsToBounds = true
-        view.backgroundColor = Colors.lightBlue
+        view.backgroundColor = Colors.mildPink
         return view
     }()
     

@@ -1,28 +1,21 @@
-//
-//  PopularFilmsDelegate.swift
-//  MovieApp
-//
-//  Created by Anna on 28.01.2025.
-//
-
 import UIKit
 
-protocol DidTapOnPopularFilmDelegate: AnyObject {
-    func didTapOnFilm(film: Film)
+protocol TappedOnTopMovieDelegate: AnyObject {
+    func tappedOnMovie(movie: Movie)
 }
 
 class TopMoviesDelegate: NSObject, UICollectionViewDelegate {
     
-    private weak var delegate: DidTapOnPopularFilmDelegate?
+    private weak var delegate: TappedOnTopMovieDelegate?
     
-    init(delegate: DidTapOnPopularFilmDelegate) {
+    init(delegate: TappedOnTopMovieDelegate) {
         self.delegate = delegate
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let dataSource = collectionView.dataSource as? UICollectionViewDiffableDataSource<CollectionViewSections, Film>,
-           let film = dataSource.itemIdentifier(for: indexPath) {
-            self.delegate?.didTapOnFilm(film: film)
+        if let dataSource = collectionView.dataSource as? UICollectionViewDiffableDataSource<CollectionViewSections, Movie>,
+           let movie = dataSource.itemIdentifier(for: indexPath) {
+            self.delegate?.tappedOnMovie(movie: movie)
         }
     }
 }

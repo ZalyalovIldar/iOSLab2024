@@ -1,18 +1,11 @@
-//
-//  CoreDataManager.swift
-//  MovieApp
-//
-//  Created by Anna on 16.01.2025.
-//
-
 import Foundation
 import CoreData
 
-protocol UpdateFavouriteFilmsDelegate: AnyObject {
-    func updateFavouriteFilms()
+protocol UpdateBookmarkedMoviesDelegate: AnyObject {
+    func updateBookmarkedMovies()
 }
 
-protocol UpdatePopularFilmsCollectionViewDelegate: AnyObject {
+protocol UpdateTopMoviesCollectionViewDelegate: AnyObject {
     func updateCollectionView()
 }
 
@@ -20,7 +13,7 @@ class CoreDataManager {
     
     static let shared = CoreDataManager()
     
-    private weak var favouriteFilmsDelegate: UpdateFavouriteFilmsDelegate?
+    private weak var bookmarkedMoviesDelegate: UpdateBookmarkedMoviesDelegate?
     
     var viewContext: NSManagedObjectContext {
         persistentContainer.viewContext
@@ -32,8 +25,8 @@ class CoreDataManager {
     
     private init() {}
     
-    func setDelegate(updateFavouriteFilmsDelegate: UpdateFavouriteFilmsDelegate) {
-        self.favouriteFilmsDelegate = updateFavouriteFilmsDelegate
+    func setDelegate(updateBookmarkedMoviesDelegate: UpdateBookmarkedMoviesDelegate) {
+        self.bookmarkedMoviesDelegate = updateBookmarkedMoviesDelegate
     }
     
     func createFetchedResultsController() -> NSFetchedResultsController<BookmarkedMovieEntity> {
@@ -48,40 +41,40 @@ class CoreDataManager {
         )
     }
     
-    func fetchFilms() -> [Film] {
+    func fetchMovies() -> [Movie] {
         let request: NSFetchRequest<MovieEntity> = MovieEntity.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: false)]
         
         do {
             return try viewContext.fetch(request).map { entity in
-                Film(
+                Movie(
                     id: Int(entity.id),
                     title: entity.title ?? "error",
                     poster: Poster(image: entity.imagePath?.base64EncodedString() ?? "notFound")
                 )
             }
         } catch {
-            print("Error fetching films: \(error.localizedDescription)")
+            print("Error fetching movies: \(error.localizedDescription)")
             return []
         }
     }
     
-    func saveFilms(_ films: [Film]) {
+    func saveMovies(_ movies: [Movie]) {
         let context = backgroundContext
         let group = DispatchGroup()
         
         context.perform { [weak self] in
             guard let self else { return }
             
-            films.forEach { film in
-                let filmEntity = MovieEntity(context: context)
-                filmEntity.id = Int64(film.id)
-                filmEntity.title = film.title
+            movies.forEach { movie in
+                let movieEntity = MovieEntity(context: context)
+                movieEntity.id = Int64(movie.id)
+                movieEntity.title = movie.title
                 
                 group.enter()
                 Task {
-                    if let filmImage = try? await ImageService.downloadImage(from: film.poster.image) {
-                        filmEntity.imagePath = filmImage.pngData()
+                    if let movieImage = try? await ImageService.downloadImage(from: movie.poster.image) {
+                        movieEntity.imagePath = movieImage.pngData()
                     }
                     group.leave()
                 }
@@ -93,12 +86,12 @@ class CoreDataManager {
         }
     }
     
-    func fetchFavouriteFilms() -> [FavouriteFilm] {
+    func fetchBookmarkedMovies() -> [BookmarkedMovie] {
         let request: NSFetchRequest<BookmarkedMovieEntity> = BookmarkedMovieEntity.fetchRequest()
         
         do {
             return try viewContext.fetch(request).map { entity in
-                FavouriteFilm(
+                BookmarkedMovie(
                     poster: Poster(image: entity.imagePath?.base64EncodedString() ?? ""),
                     title: entity.title ?? "no title",
                     rating: entity.rating,
@@ -108,12 +101,12 @@ class CoreDataManager {
                 )
             }
         } catch {
-            print("Error fetching favourite films: \(error.localizedDescription)")
+            print("Error fetching bookmarked movies: \(error.localizedDescription)")
             return []
         }
     }
     
-    func saveFavouriteFilm(_ film: FavouriteFilm) {
+    func saveBookmarkedMovie(_ movie: BookmarkedMovie) {
         let context = backgroundContext
         let group = DispatchGroup()
         
@@ -121,15 +114,15 @@ class CoreDataManager {
             guard let self else { return }
             
             let entity = BookmarkedMovieEntity(context: context)
-            entity.title = film.title
-            entity.rating = film.rating
-            entity.country = film.country
-            entity.year = film.year
-            entity.runningTime = film.runningTime
+            entity.title = movie.title
+            entity.rating = movie.rating
+            entity.country = movie.country
+            entity.year = movie.year
+            entity.runningTime = movie.runningTime
             
             group.enter()
             Task {
-                if let image = try? await ImageService.downloadImage(from: film.poster.image) {
+                if let image = try? await ImageService.downloadImage(from: movie.poster.image) {
                     entity.imagePath = image.pngData()
                 }
                 group.leave()
@@ -137,13 +130,13 @@ class CoreDataManager {
             
             group.notify(queue: .main) {
                 self.save(context: context) {
-                    self.favouriteFilmsDelegate?.updateFavouriteFilms()
+                    self.bookmarkedMoviesDelegate?.updateBookmarkedMovies()
                 }
             }
         }
     }
     
-    func removeFavouriteFilm(_ film: FavouriteFilm) {
+    func removeBookmarkedMovie(_ film: BookmarkedMovie) {
         let context = backgroundContext
         
         context.perform { [weak self] in
@@ -156,19 +149,19 @@ class CoreDataManager {
                 if let entity = try context.fetch(request).first {
                     context.delete(entity)
                     self.save(context: context) {
-                        self.favouriteFilmsDelegate?.updateFavouriteFilms()
+                        self.bookmarkedMoviesDelegate?.updateBookmarkedMovies()
                     }
                 } else {
-                    print("Favourite film not found: \(film.title)")
+                    print("Bookmarked movie not found: \(film.title)")
                 }
             } catch {
-                print("Error fetching favourite film to delete: \(error)")
+                print("Error fetching bookmarked movies to delete: \(error)")
             }
         }
     }
     
     private lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "cinemaAppNetworkRequest")
+        let container = NSPersistentContainer(name: "MovieApp")
         container.loadPersistentStores { _, error in
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")

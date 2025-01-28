@@ -1,10 +1,3 @@
-//
-//  FilmRatingView.swift
-//  MovieApp
-//
-//  Created by Anna on 28.01.2025.
-//
-
 import UIKit
 
 class MovieRatingView: UIView {
@@ -13,7 +6,7 @@ class MovieRatingView: UIView {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = Constants.ultraTiny
-        view.backgroundColor = Colors.ratingBGColor
+        view.backgroundColor = Colors.dark
         return view
     }()
     

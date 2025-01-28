@@ -1,23 +1,49 @@
-//
-//  SceneDelegate.swift
-//  MovieApp
-//
-//  Created by Anna on 16.01.2025.
-//
-
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-
+    
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-        guard let _ = (scene as? UIWindowScene) else { return }
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+        
+        window = UIWindow(windowScene: windowScene)
+        let tabBarController = UITabBarController()
+        tabBarController.tabBar.barTintColor = Colors.mainGray // Background color of the tab bar
+        
+        // Set selected and unselected item colors
+        tabBarController.tabBar.tintColor = UIColor.init(hex: "E98A9E") // Color for selected item
+        tabBarController.tabBar.unselectedItemTintColor = UIColor.lightGray // Color for unselected items
+        
+        // Main screen setup
+        let mainScreen = MainScreenController()
+        mainScreen.tabBarItem = UITabBarItem(
+            title: "Главная",
+            image: UIImage(systemName: "play.house"),
+            tag: 0
+        )
+        let mainScreenNavigationController = UINavigationController(rootViewController: mainScreen)
+        mainScreenNavigationController.navigationBar.barTintColor = Colors.mainGray
+        
+        // Favorite films screen setup
+        let favouriteFilmsScreen = BookmarkedMoviesController()
+        favouriteFilmsScreen.tabBarItem = UITabBarItem(
+            title: "Избранное",
+            image: UIImage(systemName: "bookmark"),
+            tag: 1
+        )
+        let favouriteFilmsScreenNavigationController = UINavigationController(rootViewController: favouriteFilmsScreen)
+        favouriteFilmsScreenNavigationController.navigationBar.barTintColor = Colors.mainGray
+        
+        // Add view controllers to the tab bar controller
+        tabBarController.viewControllers = [mainScreenNavigationController, favouriteFilmsScreenNavigationController]
+        
+        // Set the tab bar controller as the root
+        window?.rootViewController = tabBarController
+        window?.makeKeyAndVisible()
     }
+
 
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
@@ -47,7 +73,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
 
         // Save changes in the application's managed object context when the application transitions to the background.
-        (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
+        // (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
     }
 
 

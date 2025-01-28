@@ -1,10 +1,3 @@
-//
-//  FilmCollectionViewCell.swift
-//  MovieApp
-//
-//  Created by Anna on 28.01.2025.
-//
-
 import UIKit
 
 class MovieCollectionViewCell: UICollectionViewCell {
@@ -19,7 +12,7 @@ class MovieCollectionViewCell: UICollectionViewCell {
         return spinner
     }()
     
-    private lazy var filmImage: UIImageView = {
+    private lazy var movieImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
         image.contentMode = .scaleAspectFill
@@ -28,7 +21,7 @@ class MovieCollectionViewCell: UICollectionViewCell {
         return image
     }()
     
-    private lazy var filmPosition: UIImageView = {
+    private lazy var moviePosition: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
         image.contentMode = .scaleAspectFit
@@ -45,55 +38,55 @@ class MovieCollectionViewCell: UICollectionViewCell {
         
         loadImageTask?.cancel()
         loadImageTask = nil
-        filmImage.image = nil
+        movieImage.image = nil
     }
     
-    func configurePopularFilm(_ film: Film, at position: Int, didLoadData: Bool) {
+    func configureTopMovie(_ movie: Movie, at position: Int, didLoadData: Bool) {
         loadingIndicator.startAnimating()
-        filmPosition.image = UIImage(named: "\(position)")
+        moviePosition.image = UIImage(named: "\(position)")
         
         setupWithPositionImage()
         
         loadImageTask = Task {
             if didLoadData {
-                if let imageData = Data(base64Encoded: film.poster.image), let image = UIImage(data: imageData) {
+                if let imageData = Data(base64Encoded: movie.poster.image), let image = UIImage(data: imageData) {
                     if !Task.isCancelled {
                         loadingIndicator.stopAnimating()
-                        filmImage.image = image
+                        movieImage.image = image
                     }
                 }
             } else {
                 do {
-                    let image = try await ImageService.downloadImage(from: film.poster.image)
+                    let image = try await ImageService.downloadImage(from: movie.poster.image)
                     if !Task.isCancelled {
                         loadingIndicator.stopAnimating()
-                        filmImage.image = image
+                        movieImage.image = image
                     }
                 } catch {
                     if !Task.isCancelled {
                         self.loadingIndicator.stopAnimating()
-                        self.filmImage.image = .failToLoad
+                        self.movieImage.image = .failToLoad
                     }
                 }
             }
         }
     }
     
-    func configureFilm(_ film: Film) {
+    func configureMovie(_ movie: Movie) {
         loadingIndicator.startAnimating()
         setupWithoutPositionImage()
         
         loadImageTask = Task {
             do {
-                let image = try await ImageService.downloadImage(from: film.poster.image)
+                let image = try await ImageService.downloadImage(from: movie.poster.image)
                 if !Task.isCancelled {
                     loadingIndicator.stopAnimating()
-                    filmImage.image = image
+                    movieImage.image = image
                 }
             } catch {
                 if !Task.isCancelled {
                     self.loadingIndicator.stopAnimating()
-                    self.filmImage.image = .failToLoad
+                    self.movieImage.image = .failToLoad
                 }
             }
         }
@@ -101,35 +94,35 @@ class MovieCollectionViewCell: UICollectionViewCell {
     
     private func setupWithPositionImage() {
         addSubview(loadingIndicator)
-        addSubview(filmImage)
-        addSubview(filmPosition)
+        addSubview(movieImage)
+        addSubview(moviePosition)
         
         NSLayoutConstraint.activate([
             loadingIndicator.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             loadingIndicator.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             
-            filmImage.topAnchor.constraint(equalTo: self.topAnchor),
-            filmImage.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -Constants.small),
-            filmImage.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Constants.small),
-            filmImage.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            movieImage.topAnchor.constraint(equalTo: self.topAnchor),
+            movieImage.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -Constants.small),
+            movieImage.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Constants.small),
+            movieImage.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             
-            filmPosition.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -Constants.nothing),
-            filmPosition.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: -Constants.ultraTiny),
+            moviePosition.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -Constants.nothing),
+            moviePosition.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: -Constants.ultraTiny),
         ])
     }
     
     private func setupWithoutPositionImage() {
         addSubview(loadingIndicator)
-        addSubview(filmImage)
+        addSubview(movieImage)
         addSubview(loadingIndicator)
         NSLayoutConstraint.activate([
             loadingIndicator.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             loadingIndicator.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             
-            filmImage.topAnchor.constraint(equalTo: self.topAnchor),
-            filmImage.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            filmImage.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            filmImage.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            movieImage.topAnchor.constraint(equalTo: self.topAnchor),
+            movieImage.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            movieImage.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            movieImage.trailingAnchor.constraint(equalTo: self.trailingAnchor),
         ])
     }
 }

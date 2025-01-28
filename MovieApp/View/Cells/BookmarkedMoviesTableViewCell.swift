@@ -1,15 +1,8 @@
-//
-//  FavouriteFilmsTableViewCell.swift
-//  MovieApp
-//
-//  Created by Anna on 28.01.2025.
-//
-
 import UIKit
 
 class BookmarkedMoviesTableViewCell: UITableViewCell {
 
-    private lazy var filmImage: UIImageView = {
+    private lazy var movieImage: UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFill
         image.clipsToBounds = true
@@ -18,7 +11,7 @@ class BookmarkedMoviesTableViewCell: UITableViewCell {
         return image
     }()
 
-    private lazy var filmTitle: UILabel = {
+    private lazy var movieTitle: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont(name: "Montserrat-Bold", size: Fonts.big)
@@ -26,7 +19,7 @@ class BookmarkedMoviesTableViewCell: UITableViewCell {
         return label
     }()
 
-    private lazy var filmRating: MovieRatingViewSimple = {
+    private lazy var movieRating: MovieRatingViewSimple = {
         let rating = MovieRatingViewSimple()
         rating.translatesAutoresizingMaskIntoConstraints = false
         return rating
@@ -65,7 +58,7 @@ class BookmarkedMoviesTableViewCell: UITableViewCell {
         return clock
     }()
 
-    private lazy var filmDurationTitle: UILabel = {
+    private lazy var movieDurationTitle: UILabel = {
         let clock = UILabel()
         clock.translatesAutoresizingMaskIntoConstraints = false
         clock.textColor = Colors.lighterGray
@@ -82,10 +75,10 @@ class BookmarkedMoviesTableViewCell: UITableViewCell {
         return duration
     }()
 
-    private lazy var fildmDurationStackView: UIStackView = {
+    private lazy var movieDurationStackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [
             clockView,
-            filmDurationTitle,
+            movieDurationTitle,
             minutesLabel
         ])
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -119,12 +112,12 @@ class BookmarkedMoviesTableViewCell: UITableViewCell {
         return stack
     }()
 
-    private lazy var filmInfoStackView: UIStackView = {
+    private lazy var movieInfoStackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [
-            filmRating,
+            movieRating,
             countryInfoStackView,
             calendarStackView,
-            fildmDurationStackView
+            movieDurationStackView
         ])
         stack.axis = .vertical
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -135,8 +128,8 @@ class BookmarkedMoviesTableViewCell: UITableViewCell {
 
     private lazy var titleAndDataStackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [
-            filmTitle,
-            filmInfoStackView
+            movieTitle,
+            movieInfoStackView
         ])
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .vertical
@@ -154,31 +147,31 @@ class BookmarkedMoviesTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setupWithFilm(_ film: FavouriteFilm) {
+    func setupWithMovie(_ film: BookmarkedMovie) {
         if let imageData = Data(base64Encoded: film.poster.image) {
-            filmImage.image = UIImage(data: imageData)
+            movieImage.image = UIImage(data: imageData)
         } else {
-            filmImage.image = .failToLoad
+            movieImage.image = .failToLoad
         }
         
-        filmTitle.text = film.title
-        filmRating.setRating(rating: film.rating)
+        movieTitle.text = film.title
+        movieRating.setRating(rating: film.rating)
         calendarTitle.text = "\(film.year)"
-        filmDurationTitle.text = "\(film.runningTime)"
+        movieDurationTitle.text = "\(film.runningTime)"
         countryTitle.text = "\(Array(film.country.split(separator: ", "))[0])"
     }
 
     private func setup() {
         self.backgroundColor = Colors.mainGray
-        contentView.addSubview(filmImage)
+        contentView.addSubview(movieImage)
         contentView.addSubview(titleAndDataStackView)
         NSLayoutConstraint.activate([
-            filmImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.ultraTiny),
-            filmImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constants.ultraTiny),
-            filmImage.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: Constants.tiny),
-            filmImage.widthAnchor.constraint(equalToConstant: Constants.screenWidth / 3.5),
+            movieImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.ultraTiny),
+            movieImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constants.ultraTiny),
+            movieImage.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: Constants.tiny),
+            movieImage.widthAnchor.constraint(equalToConstant: Constants.screenWidth / 3.5),
 
-            titleAndDataStackView.leadingAnchor.constraint(equalTo: filmImage.trailingAnchor, constant: Constants.tiny),
+            titleAndDataStackView.leadingAnchor.constraint(equalTo: movieImage.trailingAnchor, constant: Constants.tiny),
             titleAndDataStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.tiny),
             titleAndDataStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constants.tiny),
             titleAndDataStackView.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -Constants.tiny),

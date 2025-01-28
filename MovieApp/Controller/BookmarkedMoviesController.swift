@@ -1,10 +1,3 @@
-//
-//  FavouriteMovieController.swift
-//  MovieApp
-//
-//  Created by Anna on 27.01.2025.
-//
-
 import UIKit
 import CoreData
 
@@ -48,7 +41,7 @@ class BookmarkedMoviesController: UIViewController, NSFetchedResultsControllerDe
     private func updateTableData() {
         do {
             try fetchedResultController.performFetch()
-            dataSource?.updateData(films: coreDataManager.fetchBookmarkedMovies())
+            dataSource?.updateData(movies: coreDataManager.fetchBookmarkedMovies())
             customView.reloadData()
         } catch {
             print("Failed during fetching data: \(error.localizedDescription)")

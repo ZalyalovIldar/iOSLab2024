@@ -1,17 +1,10 @@
-//
-//  FilmImagesCollectionViewDelegate.swift
-//  MovieApp
-//
-//  Created by Anna on 28.01.2025.
-//
-
 import UIKit
 
 class MovieSnapsCollectionViewDelegate: NSObject, UICollectionViewDelegate {
     
     private weak var viewController: UIViewController?
     private var images = [String]()
-    private var pageViewController: FilmPageViewController?
+    private var pageViewController: MoviePageViewController?
     
     init(withData images: [String], viewController: UIViewController) {
         self.images = images
@@ -19,7 +12,7 @@ class MovieSnapsCollectionViewDelegate: NSObject, UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        pageViewController = FilmPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
+        pageViewController = MoviePageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
         if let pageViewController {
             pageViewController.setImages(images: self.images)
             pageViewController.setInitialPage(index: indexPath.item)

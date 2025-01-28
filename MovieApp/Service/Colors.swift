@@ -3,8 +3,8 @@ import UIKit
 class Colors {
     static let mainGray: UIColor! = .init(hex: "242A32")
     static let lighterGray: UIColor! = .init(hex: "67686D")
-    static let ratingBGColor: UIColor! = .init(hex: "252836")
-    static let lightBlue: UIColor! = .init(hex: "E98A9E")
+    static let dark: UIColor! = .init(hex: "252836")
+    static let mildPink: UIColor! = .init(hex: "E98A9E")
 }
 
 extension UIColor {

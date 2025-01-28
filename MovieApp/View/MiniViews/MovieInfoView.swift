@@ -1,10 +1,3 @@
-//
-//  FilmInfoView.swift
-//  MovieApp
-//
-//  Created by Anna on 28.01.2025.
-//
-
 import UIKit
 
 class MovieInfoView: UIView {
@@ -61,7 +54,7 @@ class MovieInfoView: UIView {
         return clock
     }()
     
-    private lazy var filmDurationTitle: UILabel = {
+    private lazy var movieDurationTitle: UILabel = {
         let clock = UILabel()
         clock.translatesAutoresizingMaskIntoConstraints = false
         clock.textColor = Colors.lighterGray
@@ -78,10 +71,10 @@ class MovieInfoView: UIView {
         return duration
     }()
     
-    private lazy var fildmDurationStackView: UIStackView = {
+    private lazy var movieDurationStackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [
             clockView,
-            filmDurationTitle,
+            movieDurationTitle,
             minutesLabel
         ])
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -119,7 +112,7 @@ class MovieInfoView: UIView {
         let stack = UIStackView(arrangedSubviews: [
             calendarStackView,
             firstVerticalSeparator,
-            fildmDurationStackView,
+            movieDurationStackView,
             secondVerticalSeparator,
             countryInfoStackView
         ])
@@ -137,9 +130,9 @@ class MovieInfoView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupWithFilm(_ film: FilmWithInfo) {
+    func setupWithMovie(_ film: MovieWithInfo) {
         calendarTitle.text = "\(film.year)"
-        filmDurationTitle.text = "\(film.runningTime ?? 0)"
+        movieDurationTitle.text = "\(film.runningTime ?? 0)"
         countryTitle.text = "\(Array(film.country.split(separator: ", "))[0])"
     }
     

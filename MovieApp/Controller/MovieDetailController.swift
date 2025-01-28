@@ -1,20 +1,13 @@
-//
-//  MovieDetailController.swift
-//  MovieApp
-//
-//  Created by Anna on 27.01.2025.
-//
-
 import UIKit
 import SafariServices
 
 class MovieDetailController: UIViewController {
-    private var customView: FilmDetailView {
-        view as! FilmDetailView
+    private var customView: MovieDetailView {
+        view as! MovieDetailView
     }
-    private var film: FilmWithInfo!
+    private var movie: MovieWithInfo!
     private var images: [String] = []
-    private var filmImagesCollectionViewDataSource: FilmImagesCollectionViewDataSource?
+    private var filmImagesCollectionViewDataSource: MovieSnapsCollectionViewDataSource?
     private var filmImagesCollectionViewDelegate: MovieSnapsCollectionViewDelegate?
     private let dataManager = MovieDetailDataManager()
     private var trailerLink: String!
@@ -24,7 +17,7 @@ class MovieDetailController: UIViewController {
     
     override func loadView() {
         super.loadView()
-        view = FilmDetailView(playTrailerDelegate: self)
+        view = MovieDetailView(playTrailerDelegate: self)
     }
     
     override func viewDidLoad() {
@@ -34,7 +27,7 @@ class MovieDetailController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupNavigationBar(film)
+        setupNavigationBar(movie)
         setupCollectionViewData()
     }
     
@@ -48,20 +41,20 @@ class MovieDetailController: UIViewController {
         customView.updateLayout()
     }
     
-    init(withFilm film: FilmWithInfo) {
+    init(withFilm film: MovieWithInfo) {
         super.init(nibName: nil, bundle: nil)
-        self.film = film
+        self.movie = film
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupNavigationBar(_ film: FilmWithInfo) {
+    private func setupNavigationBar(_ film: MovieWithInfo) {
         navigationItem.titleView = NavigationItemView(title: "О фильме")
         
         let dismissButton = getDismissButton()
-        let favouriteButton = getFavouriteButton()
+        let favouriteButton = getBookmarkButton()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: favouriteButton)
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButton)
@@ -119,40 +112,39 @@ class MovieDetailController: UIViewController {
         }
     }
     
-    private func getFavouriteButton() -> UIButton {
-        let favouriteButton = UIButton()
-        favouriteButton.translatesAutoresizingMaskIntoConstraints = false
-        favouriteButton.heightAnchor.constraint(equalToConstant: Constants.small * 1.2).isActive = true
-        favouriteButton.widthAnchor.constraint(equalToConstant: Constants.small).isActive = true
-        /// Использовал image'ы из assets'ов потому что с UIImate(systemName: "bookmark") при анимациях были глитчи
-        favouriteButton.setImage(dataManager.getFavouriteButtonImage(for: film), for: .normal)
+    private func getBookmarkButton() -> UIButton {
+        let bookmarkButton = UIButton()
+        bookmarkButton.translatesAutoresizingMaskIntoConstraints = false
+        bookmarkButton.heightAnchor.constraint(equalToConstant: Constants.small * 1.2).isActive = true
+        bookmarkButton.widthAnchor.constraint(equalToConstant: Constants.small).isActive = true
+        bookmarkButton.setImage(dataManager.getBookmarkButtonImage(for: movie), for: .normal)
         
-        let favouriteButtonAction = UIAction { [weak self] _ in
+        let bookmarkButtonAction = UIAction { [weak self] _ in
             guard let self else { return }
             feedbackGenerator.impactOccurred()
-            dataManager.switchMovieState(film: film)
+            dataManager.switchMovieState(movie: movie)
 
-            if dataManager.isFavourite(filmTitle: film.title) {
-                Animations.addFilmToFavouriteAnimation(button: favouriteButton)
+            if dataManager.isBookmarked(movieTitle: movie.title) {
+                Animations.addFilmToFavouriteAnimation(button: bookmarkButton)
             } else {
-                Animations.shake(favouriteButton) { favouriteButton in
+                Animations.shake(bookmarkButton) { favouriteButton in
                     favouriteButton.setImage(.bookmark, for: .normal)
                     Animations.shake(favouriteButton)
                 }
             }
         }
-        favouriteButton.addAction(favouriteButtonAction, for: .touchUpInside)
-        return favouriteButton
+        bookmarkButton.addAction(bookmarkButtonAction, for: .touchUpInside)
+        return bookmarkButton
     }
     
     private func setupData() {
-        customView.setUpWithFilm(film)
-        images = dataManager.getMovieImages(film)
-        trailerLink = dataManager.getTrailerLink(film)
+        customView.setUpWithFilm(movie)
+        images = dataManager.getMovieImages(movie)
+        trailerLink = dataManager.getTrailerLink(movie)
     }
     
     private func setupCollectionViewData() {
-        filmImagesCollectionViewDataSource = FilmImagesCollectionViewDataSource(images: images)
+        filmImagesCollectionViewDataSource = MovieSnapsCollectionViewDataSource(images: images)
         if let filmImagesCollectionViewDataSource {
             filmImagesCollectionViewDelegate = MovieSnapsCollectionViewDelegate(withData: filmImagesCollectionViewDataSource.getData(), viewController: self)
         }

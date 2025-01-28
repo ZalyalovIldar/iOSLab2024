@@ -1,21 +1,14 @@
-//
-//  ScrollViewController.swift
-//  MovieApp
-//
-//  Created by Anna on 27.01.2025.
-//
-
 import UIKit
 
 class SlideViewController: UIViewController {
     
-    var customView: FilmImageSlideView {
-        view as! FilmImageSlideView
+    var customView: SlideView {
+        view as! SlideView
     }
     
     override func loadView() {
         super.loadView()
-        view = FilmImageSlideView()
+        view = SlideView()
     }
     
     override func viewDidLoad() {

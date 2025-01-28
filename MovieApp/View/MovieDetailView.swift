@@ -8,7 +8,7 @@ class MovieDetailView: UIView {
     
     private weak var delegate: PlayTrailerDelegate?
     private var prettyDescription: String!
-    private let dataSource = ["Описание", "Актеры"]
+    private let dataSource = ["Описание", "В ролях"]
     private var currentFilm: MovieWithInfo!
     private var selectedIndex = 0
     private var underlineWidth = UIScreen.main.bounds.width / 2 - Constants.tiny
@@ -31,7 +31,7 @@ class MovieDetailView: UIView {
         return spinner
     }()
     
-    private lazy var filmImagesCollectionView: UICollectionView = {
+    private lazy var movieSnapsCollectionView: UICollectionView = {
         let collectionViewLayout = UICollectionViewFlowLayout()
         collectionViewLayout.scrollDirection = .horizontal
         collectionViewLayout.minimumLineSpacing = 0
@@ -46,7 +46,7 @@ class MovieDetailView: UIView {
         return collectionView
     }()
     
-    private lazy var filmAvatarImage: UIImageView = {
+    private lazy var movieAvatarImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
         image.contentMode = .scaleAspectFill
@@ -55,7 +55,7 @@ class MovieDetailView: UIView {
         return image
     }()
     
-    private lazy var filmTitleLabel: UILabel = {
+    private lazy var movieTitleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Montserrat-Bold", size: Fonts.big)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -94,16 +94,17 @@ class MovieDetailView: UIView {
         return view
     }()
     
-    private lazy var filmDescriptionTitle: UILabel = {
+    private lazy var movieDescriptionTitle: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont(name: "Montserrat-Bold", size: Fonts.big)
         label.textColor = Colors.lighterGray
-        label.text = "Про фильм"
+        label.text = "О фильме"
         return label
     }()
     
-    private lazy var infoAndStarsCollectionView: UICollectionView = {
+    // Collection view to display additional movie info such as cast, etc.
+    private lazy var infoAndStarringCollectionView: UICollectionView = {
         let collectionViewLayout = UICollectionViewFlowLayout()
         collectionViewLayout.scrollDirection = .horizontal
         collectionViewLayout.minimumLineSpacing = 0
@@ -129,7 +130,7 @@ class MovieDetailView: UIView {
         return view
     }()
     
-    private lazy var filmDescriptionText: UILabel = {
+    private lazy var movieDescriptionText: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont(name: "Montserrat-Medium", size: Fonts.medium)
@@ -138,10 +139,10 @@ class MovieDetailView: UIView {
         return label
     }()
     
-    private lazy var filmInfoAndStarsDataStackView: UIStackView = {
+    private lazy var movieInfoAndStarsDataStackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [
-            infoAndStarsCollectionView,
-            filmDescriptionText
+            infoAndStarringCollectionView,
+            movieDescriptionText
         ])
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .vertical
@@ -159,42 +160,41 @@ class MovieDetailView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // Updates layout constraints dynamically when the view size changes.
     func updateLayout() {
-        /// Set / Update filmImagesCollectionView collectionViewLayout.itemSize
-        if let layout = filmImagesCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+        if let layout = movieSnapsCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             let itemWidth = self.bounds.width - safeAreaInsets.left - safeAreaInsets.right
             layout.itemSize = .init(width: itemWidth, height: itemWidth / 1.8)
             layout.invalidateLayout()
         }
-        /// Set / Update infoAndStarsCollectionView collectionViewLayout.itemSize
-        if let layout = infoAndStarsCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+        if let layout = infoAndStarringCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             let itemWidth = (self.bounds.width - safeAreaInsets.left - safeAreaInsets.right) / 2 - Constants.tiny
             layout.itemSize = .init(width: itemWidth, height: Constants.little)
             underlineWidthConstraint.constant = itemWidth
             layout.invalidateLayout()
         }
-        /// При выделении поля "Актеры" и дальнейшем перевороте underlineView.leadingAnchor будет не на своем месте => перепроверяем
         if selectedIndex == 1 {
             underlineLeadingConstraint.constant = (self.bounds.width - safeAreaInsets.right - safeAreaInsets.left) / 2
         }
     }
     
+    // Sets up the view with the current movie data.
     func setUpWithFilm(_ film: MovieWithInfo) {
         currentFilm = film
         updateUI()
         
         loadingIndicator.startAnimating()
-        filmAvatarImage.image = nil
+        movieAvatarImage.image = nil
         Task { [weak self] in
             guard let self else { return }
             
             do {
                 let image = try await ImageService.downloadImage(from: film.poster.image)
                 loadingIndicator.stopAnimating()
-                filmAvatarImage.image = image
+                movieAvatarImage.image = image
             } catch {
                 loadingIndicator.stopAnimating()
-                filmAvatarImage.image = .failToLoad
+                movieAvatarImage.image = .failToLoad
                 print("Error during loading \(film.title) avatar image: \(error.localizedDescription)")
             }
         }
@@ -202,30 +202,30 @@ class MovieDetailView: UIView {
     
     func setDataSourceForFilmImagesCollectionView(with dataSource: MovieSnapsCollectionViewDataSource?) {
         if let dataSource {
-            filmImagesCollectionView.dataSource = dataSource
+            movieSnapsCollectionView.dataSource = dataSource
         }
     }
     
     
     func setDelegateForFilmImagesCollectionView(with delegate: MovieSnapsCollectionViewDelegate?) {
         if let delegate {
-            filmImagesCollectionView.delegate = delegate
+            movieSnapsCollectionView.delegate = delegate
         }
     }
     
     private func updateUI() {
         prettyDescription = makePretty(currentFilm.description)
         ratingView.setRating(rating: currentFilm.rating ?? 0.0)
-        specialInfoView.setupWithFilm(currentFilm)
-        filmTitleLabel.text = currentFilm.title
+        specialInfoView.setupWithMovie(currentFilm)
+        movieTitleLabel.text = currentFilm.title
         updateFilmDescription()
     }
     
     private func updateFilmDescription() {
         if selectedIndex == 0 {
-            filmDescriptionText.text = prettyDescription
+            movieDescriptionText.text = prettyDescription
         } else {
-            filmDescriptionText.text = "    " + currentFilm.stars
+            movieDescriptionText.text = "    " + currentFilm.stars
         }
     }
     
@@ -239,12 +239,12 @@ class MovieDetailView: UIView {
         addSubview(scrollView)
         
         scrollView.addSubview(loadingIndicator)
-        scrollView.addSubview(filmImagesCollectionView)
-        scrollView.addSubview(filmAvatarImage)
-        scrollView.addSubview(filmTitleLabel)
+        scrollView.addSubview(movieSnapsCollectionView)
+        scrollView.addSubview(movieAvatarImage)
+        scrollView.addSubview(movieTitleLabel)
         scrollView.addSubview(ratingAndPlayerStackView)
         scrollView.addSubview(specialInfoView)
-        scrollView.addSubview(filmInfoAndStarsDataStackView)
+        scrollView.addSubview(movieInfoAndStarsDataStackView)
         scrollView.addSubview(underlineView)
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
@@ -252,37 +252,37 @@ class MovieDetailView: UIView {
             scrollView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
             
-            filmImagesCollectionView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            filmImagesCollectionView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            filmImagesCollectionView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            filmImagesCollectionView.heightAnchor.constraint(equalToConstant: Constants.screenWidth / 1.8),
-            scrollView.widthAnchor.constraint(equalTo: filmImagesCollectionView.widthAnchor),
+            movieSnapsCollectionView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            movieSnapsCollectionView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            movieSnapsCollectionView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            movieSnapsCollectionView.heightAnchor.constraint(equalToConstant: Constants.screenWidth / 1.8),
+            scrollView.widthAnchor.constraint(equalTo: movieSnapsCollectionView.widthAnchor),
             
-            filmAvatarImage.centerYAnchor.constraint(equalTo: filmImagesCollectionView.bottomAnchor),
-            filmAvatarImage.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: Constants.little),
-            filmAvatarImage.heightAnchor.constraint(equalTo: filmImagesCollectionView.heightAnchor, multiplier: 0.75),
-            filmAvatarImage.widthAnchor.constraint(equalToConstant: Constants.screenWidth / 3.5),
+            movieAvatarImage.centerYAnchor.constraint(equalTo: movieSnapsCollectionView.bottomAnchor),
+            movieAvatarImage.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: Constants.little),
+            movieAvatarImage.heightAnchor.constraint(equalTo: movieSnapsCollectionView.heightAnchor, multiplier: 0.75),
+            movieAvatarImage.widthAnchor.constraint(equalToConstant: Constants.screenWidth / 3.5),
             
-            loadingIndicator.centerXAnchor.constraint(equalTo: filmAvatarImage.centerXAnchor),
-            loadingIndicator.centerYAnchor.constraint(equalTo: filmAvatarImage.centerYAnchor),
+            loadingIndicator.centerXAnchor.constraint(equalTo: movieAvatarImage.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: movieAvatarImage.centerYAnchor),
             
-            filmTitleLabel.leadingAnchor.constraint(equalTo: filmAvatarImage.trailingAnchor, constant: Constants.ultraTiny),
-            filmTitleLabel.bottomAnchor.constraint(equalTo: filmAvatarImage.bottomAnchor),
-            filmTitleLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -Constants.ultraTiny),
+            movieTitleLabel.leadingAnchor.constraint(equalTo: movieAvatarImage.trailingAnchor, constant: Constants.ultraTiny),
+            movieTitleLabel.bottomAnchor.constraint(equalTo: movieAvatarImage.bottomAnchor),
+            movieTitleLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -Constants.ultraTiny),
             
-            ratingAndPlayerStackView.trailingAnchor.constraint(equalTo: filmImagesCollectionView.trailingAnchor, constant: -Constants.ultraTiny),
-            ratingAndPlayerStackView.bottomAnchor.constraint(equalTo: filmImagesCollectionView.bottomAnchor, constant: -Constants.ultraTiny),
+            ratingAndPlayerStackView.trailingAnchor.constraint(equalTo: movieSnapsCollectionView.trailingAnchor, constant: -Constants.ultraTiny),
+            ratingAndPlayerStackView.bottomAnchor.constraint(equalTo: movieSnapsCollectionView.bottomAnchor, constant: -Constants.ultraTiny),
             
-            specialInfoView.topAnchor.constraint(equalTo: filmAvatarImage.bottomAnchor, constant: Constants.tiny),
+            specialInfoView.topAnchor.constraint(equalTo: movieAvatarImage.bottomAnchor, constant: Constants.tiny),
             specialInfoView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
 
-            infoAndStarsCollectionView.heightAnchor.constraint(equalToConstant: Constants.little),
-            filmInfoAndStarsDataStackView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Constants.tiny),
-            filmInfoAndStarsDataStackView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -Constants.tiny),
-            filmInfoAndStarsDataStackView.topAnchor.constraint(equalTo: specialInfoView.bottomAnchor, constant: Constants.ultraTiny),
+            infoAndStarringCollectionView.heightAnchor.constraint(equalToConstant: Constants.little),
+            movieInfoAndStarsDataStackView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: Constants.tiny),
+            movieInfoAndStarsDataStackView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -Constants.tiny),
+            movieInfoAndStarsDataStackView.topAnchor.constraint(equalTo: specialInfoView.bottomAnchor, constant: Constants.ultraTiny),
             
-            underlineView.topAnchor.constraint(equalTo: infoAndStarsCollectionView.topAnchor, constant: Constants.little),
-            filmInfoAndStarsDataStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            underlineView.topAnchor.constraint(equalTo: infoAndStarringCollectionView.topAnchor, constant: Constants.little),
+            movieInfoAndStarsDataStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
         ])
         
         underlineLeadingConstraint = underlineView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: Constants.tiny)
@@ -340,7 +340,6 @@ extension MovieDetailView: UICollectionViewDelegate, UICollectionViewDataSource 
         }
         
         UIView.animate(withDuration: 0.1) { [weak self] in
-            /// Сбрасываю выделение чтоб в момент перемещения подчеркивания ничего не было выделено
             self?.selectedIndex = -1
             collectionView.reloadData()
             self?.underlineView.backgroundColor = Colors.lighterGray
@@ -350,9 +349,7 @@ extension MovieDetailView: UICollectionViewDelegate, UICollectionViewDataSource 
                 self.underlineLeadingConstraint.constant = newLeadingConstant
                 self.layoutIfNeeded()
             } completion: { [weak self] _ in
-                /// Возвращаю выделенный фрагмент перед reloadData()
                 self?.selectedIndex = indexPath.item
-                /// ReloadData работала быстрее и эффективнее чем reloadItems(at: [indexPath.item == 0 ? IndexPath(row: 0, section: 0) : IndexPath(row: 1, section: 0)])
                 collectionView.reloadData()
                 self?.underlineView.backgroundColor = .systemGray6
                 self?.updateFilmDescription()

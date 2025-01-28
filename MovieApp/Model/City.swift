@@ -1,8 +1,7 @@
-//
-//  City.swift
-//  MovieApp
-//
-//  Created by Anna on 24.01.2025.
-//
-
 import Foundation
+
+struct City: Codable, Hashable {
+    
+    let slug: String
+    let name: String
+}

@@ -1,10 +1,3 @@
-//
-//  FilmDetailDataManager.swift
-//  MovieApp
-//
-//  Created by Anna on 28.01.2025.
-//
-
 import UIKit
 
 class MovieDetailDataManager {
@@ -13,52 +6,52 @@ class MovieDetailDataManager {
     private let favouriteKey = "is_favourite_"
     private let coreDataManager = CoreDataManager.shared
     
-    func isFavourite(filmTitle: String) -> Bool {
-        userDefaults.bool(forKey: favouriteKey + filmTitle)
+    func isBookmarked(movieTitle: String) -> Bool {
+        userDefaults.bool(forKey: favouriteKey + movieTitle)
     }
     
-    func getFilmImages(_ film: FilmWithInfo) -> [String] {
-        film.images.map { $0.image }
+    func getMovieImages(_ movie: MovieWithInfo) -> [String] {
+        movie.images.map { $0.image }
     }
 
-    func getTrailerLink(_ film: FilmWithInfo) -> String {
-        film.trailerLink ?? ""
+    func getTrailerLink(_ movie: MovieWithInfo) -> String {
+        movie.trailerLink ?? ""
     }
     
-    func getFavouriteButtonImage(for film: FilmWithInfo) -> UIImage {
-        isFavourite(filmTitle: film.title) ? .bookmarkDone : .bookmark
+    func getBookmarkButtonImage(for movie: MovieWithInfo) -> UIImage {
+        isBookmarked(movieTitle: movie.title) ? .bookmarkDone : .bookmark
     }
     
-    func switchFilmState(film: FilmWithInfo) {
-        let film = mapToFavouriteFilm(film)
+    func switchMovieState(movie: MovieWithInfo) {
+        let movie = mapToBookmarkedMovie(movie)
         
-        let filmUniqKey = favouriteKey + film.title
-        var updatedValue = userDefaults.bool(forKey: filmUniqKey)
-        /// Changing tha value
+        let movieUniqueKey = favouriteKey + movie.title
+        var updatedValue = userDefaults.bool(forKey: movieUniqueKey)
+        
         updatedValue.toggle()
-        userDefaults.set(updatedValue, forKey: filmUniqKey)
+        userDefaults.set(updatedValue, forKey: movieUniqueKey)
         
-        if isFavourite(filmTitle: film.title) {
-            addFilmToFavourite(film)
+        if isBookmarked(movieTitle: movie.title) {
+            bookmarkMovie(movie)
         } else {
-            deleteFilmFromFavourite(film)
+            deleteFilmFromFavourite(movie)
         }
     }
     
-    private func addFilmToFavourite(_ film: FavouriteFilm) {
-        coreDataManager.saveFavouriteFilm(film)
+    private func bookmarkMovie(_ movie: BookmarkedMovie) {
+        coreDataManager.saveBookmarkedMovie(movie)
     }
     
-    private func deleteFilmFromFavourite(_ film: FavouriteFilm) {
-        coreDataManager.removeFavouriteFilm(film)
+    private func deleteFilmFromFavourite(_ movie: BookmarkedMovie) {
+        coreDataManager.removeBookmarkedMovie(movie)
     }
     
-    private func mapToFavouriteFilm(_ film: FilmWithInfo) -> FavouriteFilm {
-        FavouriteFilm(poster: Poster(image: film.poster.image),
-                                          title: film.title,
-                                          rating: film.rating ?? 0.0,
-                                          year: Int16(film.year),
-                                          runningTime: Int16(film.runningTime ?? 0),
-                                          country: film.country)
+    private func mapToBookmarkedMovie(_ movie: MovieWithInfo) -> BookmarkedMovie {
+        BookmarkedMovie(poster: Poster(image: movie.poster.image),
+                                          title: movie.title,
+                                          rating: movie.rating ?? 0.0,
+                                          year: Int16(movie.year),
+                                          runningTime: Int16(movie.runningTime ?? 0),
+                                          country: movie.country)
     }
 }

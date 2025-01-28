@@ -1,10 +1,3 @@
-//
-//  FilmImageSlideView.swift
-//  MovieApp
-//
-//  Created by Anna on 28.01.2025.
-//
-
 import UIKit
 
 protocol SlideViewDelegate: AnyObject {
@@ -111,31 +104,26 @@ class SlideView: UIView {
         addSubview(lowerDismissButton)
         
         NSLayoutConstraint.activate([
-            // Loading Indicator
+
             loadingIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
             loadingIndicator.centerYAnchor.constraint(equalTo: centerYAnchor),
             
-            // ImageView
             imageView.widthAnchor.constraint(equalTo: widthAnchor),
             imageView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.width / 1.8),
             imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
             imageView.centerYAnchor.constraint(equalTo: centerYAnchor),
             
-            // Next Button
             nextButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -Constants.tiny),
             nextButton.centerYAnchor.constraint(equalTo: centerYAnchor),
             
-            // Previous Button
             previousButton.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: Constants.tiny),
             previousButton.centerYAnchor.constraint(equalTo: centerYAnchor),
             
-            // Upper Dismiss Button
             upperDismissButton.topAnchor.constraint(equalTo: topAnchor),
             upperDismissButton.leadingAnchor.constraint(equalTo: leadingAnchor),
             upperDismissButton.trailingAnchor.constraint(equalTo: trailingAnchor),
             upperDismissButton.bottomAnchor.constraint(equalTo: imageView.topAnchor),
             
-            // Lower Dismiss Button
             lowerDismissButton.topAnchor.constraint(equalTo: imageView.bottomAnchor),
             lowerDismissButton.leadingAnchor.constraint(equalTo: leadingAnchor),
             lowerDismissButton.trailingAnchor.constraint(equalTo: trailingAnchor),

@@ -1,10 +1,3 @@
-//
-//  FilmImageCollectionViewCell.swift
-//  MovieApp
-//
-//  Created by Anna on 28.01.2025.
-//
-
 import UIKit
 
 class MovieSnapsCollectionViewCell: UICollectionViewCell {
@@ -17,7 +10,7 @@ class MovieSnapsCollectionViewCell: UICollectionViewCell {
         return spinner
     }()
     
-    private lazy var filmImage: UIImageView = {
+    private lazy var movieImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
         image.contentMode = .scaleAspectFill
@@ -25,18 +18,18 @@ class MovieSnapsCollectionViewCell: UICollectionViewCell {
     }()
     
     func setupWithImage(_ image: String) {
-        filmImage.image = nil
+        movieImage.image = nil
         
         loadingIndicator.startAnimating()
         Task {
             do {
                 let image = try await ImageService.downloadImage(from: image)
-                filmImage.image = image
+                movieImage.image = image
                 loadingIndicator.stopAnimating()
             } catch {
                 print("Error of loading image on film: \(error.localizedDescription)")
                 loadingIndicator.stopAnimating()
-                filmImage.image = .failToLoad
+                movieImage.image = .failToLoad
             }
         }
     }
@@ -52,16 +45,16 @@ class MovieSnapsCollectionViewCell: UICollectionViewCell {
     
     private func setup() {
         addSubview(loadingIndicator)
-        addSubview(filmImage)
+        addSubview(movieImage)
     
         NSLayoutConstraint.activate([
             loadingIndicator.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             loadingIndicator.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             
-            filmImage.topAnchor.constraint(equalTo: self.topAnchor),
-            filmImage.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            filmImage.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            filmImage.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            movieImage.topAnchor.constraint(equalTo: self.topAnchor),
+            movieImage.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            movieImage.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            movieImage.trailingAnchor.constraint(equalTo: self.trailingAnchor),
         ])
     }
 }

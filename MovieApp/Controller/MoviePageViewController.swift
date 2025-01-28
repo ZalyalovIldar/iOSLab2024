@@ -1,10 +1,3 @@
-//
-//  ViewController.swift
-//  MovieApp
-//
-//  Created by Anna on 27.01.2025.
-//
-
 import UIKit
 
 class MoviePageViewController: UIPageViewController {
@@ -45,16 +38,16 @@ class MoviePageViewController: UIPageViewController {
 
 extension MoviePageViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard let filmImageSlideViewController = viewController as? SlideViewController,
-              let currentPageIndex = pages.firstIndex(of: filmImageSlideViewController),
+        guard let imageSlideViewController = viewController as? SlideViewController,
+              let currentPageIndex = pages.firstIndex(of: imageSlideViewController),
               currentPageIndex > 0 else  { return nil }
         
         return pages[currentPageIndex - 1]
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard let filmImageSlideViewController = viewController as? SlideViewController,
-              let currentPageIndex = pages.firstIndex(of: filmImageSlideViewController),
+        guard let imageSlideViewController = viewController as? SlideViewController,
+              let currentPageIndex = pages.firstIndex(of: imageSlideViewController),
               currentPageIndex < pages.count - 1 else { return nil }
         
         return pages[currentPageIndex + 1]
