@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23605" systemVersion="24C101" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="City" representedClassName="City" syncable="YES">
+        <attribute name="name" attributeType="String"/>
+        <attribute name="slug" attributeType="String"/>
+    </entity>
+    <entity name="DetailedFilm" representedClassName="DetailedFilm" syncable="YES">
+        <attribute name="bodyText" attributeType="String"/>
+        <attribute name="country" attributeType="String"/>
+        <attribute name="director" optional="YES" attributeType="String"/>
+        <attribute name="imdbRating" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="runningTime" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="stars" attributeType="String"/>
+        <attribute name="title" attributeType="String"/>
+        <attribute name="trailer" optional="YES" attributeType="String"/>
+        <attribute name="year" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="film" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Film" inverseName="detailedFilm" inverseEntity="Film"/>
+        <relationship name="genres" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Genre" inverseName="detailedFilm" inverseEntity="Genre"/>
+        <relationship name="images" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Image" inverseName="detailedFilm" inverseEntity="Image"/>
+        <relationship name="poster" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Poster" inverseName="detailedFilm" inverseEntity="Poster"/>
+    </entity>
+    <entity name="Film" representedClassName="Film" syncable="YES">
+        <attribute name="id" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="isFavourite" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="title" attributeType="String"/>
+        <relationship name="detailedFilm" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DetailedFilm" inverseName="film" inverseEntity="DetailedFilm"/>
+        <relationship name="filmsResponse" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FilmsResponse" inverseName="results" inverseEntity="FilmsResponse"/>
+        <relationship name="poster" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Poster" inverseName="film" inverseEntity="Poster"/>
+    </entity>
+    <entity name="FilmsResponse" representedClassName="FilmsResponse" syncable="YES">
+        <attribute name="count" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="next" optional="YES" attributeType="String"/>
+        <attribute name="page" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="previous" optional="YES" attributeType="String"/>
+        <relationship name="results" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Film" inverseName="filmsResponse" inverseEntity="Film"/>
+    </entity>
+    <entity name="Genre" representedClassName="Genre" syncable="YES">
+        <attribute name="id" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="slug" attributeType="String"/>
+        <relationship name="detailedFilm" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DetailedFilm" inverseName="genres" inverseEntity="DetailedFilm"/>
+    </entity>
+    <entity name="Image" representedClassName="Image" syncable="YES">
+        <attribute name="image" attributeType="String"/>
+        <relationship name="detailedFilm" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DetailedFilm" inverseName="images" inverseEntity="DetailedFilm"/>
+    </entity>
+    <entity name="Poster" representedClassName="Poster" syncable="YES">
+        <attribute name="image" attributeType="String"/>
+        <relationship name="detailedFilm" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DetailedFilm" inverseName="poster" inverseEntity="DetailedFilm"/>
+        <relationship name="film" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Film" inverseName="poster" inverseEntity="Film"/>
+    </entity>
+</model>
