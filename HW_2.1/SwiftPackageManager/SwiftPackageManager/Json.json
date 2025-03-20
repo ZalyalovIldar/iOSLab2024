@@ -1,0 +1,48 @@
+[
+    {
+        "title": "The Great Gatsby",
+        "author": "F. Scott Fitzgerald",
+        "publishedYear": 1925,
+        "genre": "Novel",
+        "isbn": "9780743273565",
+        "available": true,
+        "copies": 5
+    },
+    {
+        "title": "To Kill a Mockingbird",
+        "author": "Harper Lee",
+        "publishedYear": 1960,
+        "genre": "Fiction",
+        "isbn": "9780061120084",
+        "available": false,
+        "copies": 3
+    },
+    {
+        "title": "1984",
+        "author": "George Orwell",
+        "publishedYear": 1949,
+        "genre": "Dystopian",
+        "isbn": "9780451524935",
+        "available": true,
+        "copies": 7
+    },
+    {
+        "title": "Pride and Prejudice",
+        "author": "Jane Austen",
+        "publishedYear": 1813,
+        "genre": "Romance",
+        "isbn": "9780199837415",
+        "available": true,
+        "copies": 4
+    },
+    {
+        "title": "The Catcher in the Rye",
+        "author": "J.D. Salinger",
+        "publishedYear": 1951,
+        "genre": "Fiction",
+        "isbn": "9780316769488",
+        "available": false,
+        "copies": 2
+    }
+]
+
