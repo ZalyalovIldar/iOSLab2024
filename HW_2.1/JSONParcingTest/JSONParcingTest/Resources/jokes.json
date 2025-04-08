@@ -1,0 +1,391 @@
+{
+  "jokes": [
+    {
+      "text": "q. How do you comfort a JavaScript bug? a. You console it.",
+      "details": {
+        "question": {
+          "text": "How do you comfort a JavaScript bug?"
+        },
+        "answer": {
+          "text": "You console it."
+        },
+        "author": "elijahmanor",
+        "created": "09/06/2013",
+        "tags": ["javascript"],
+        "rating": 1
+      }
+    },
+    {
+      "text": "q. Why did the child component have such great self-esteem? a. Because its parent kept giving it `props`!",
+      "details": {
+        "question": {
+          "text": "Why did the child component have such great self-esteem?"
+        },
+        "answer": {
+          "text": "Because its parent kept giving it `props`!"
+        },
+        "author": "elijahmanor",
+        "created": "05/22/2017",
+        "tags": ["javascript", "react"],
+        "rating": 1
+      }
+    },
+    {
+      "text": "q. Why do C# and Java developers keep breaking their keyboards? a. Because they use a strongly typed language!",
+      "details": {
+        "question": {
+          "text": "Why do C# and Java developers keep breaking their keyboards"
+        },
+        "answer": {
+          "text": "Because they use a strongly typed language"
+        },
+        "author": "elijahmanor",
+        "created": "09/23/2013",
+        "tags": ["javascript", "java", "c#"],
+        "rating": 1
+      }
+    },
+    {
+      "text": "q. Why did the functional component feel lost? a. Because it didn't know what `state` it was in!",
+      "details": {
+        "question": {
+          "text": "Why did the functional component feel lost?"
+        },
+        "answer": {
+          "text": "Because it didn't know what `state` it was in!"
+        },
+        "author": "elijahmanor",
+        "created": "05/22/2017",
+        "tags": ["javascript", "react"],
+        "rating": 1
+      }
+    },
+    {
+      "text": "q. Why was the JavaScript developer sad? a. Because he didn't Node how to Express himself!",
+      "details": {
+        "question": {
+          "text": "Why was the JavaScript developer sad?"
+        },
+        "answer": {
+          "text": "Because he didn't Node how to Express himself!"
+        },
+        "author": "elijahmanor",
+        "created": "09/10/2013",
+        "tags": ["javascript", "node"],
+        "rating": 1
+      }
+    },
+    {
+      "text": "q. Why did the developer go broke? a. Because he used up all his cache!",
+      "details": {
+        "question": {
+          "text": "Why did the developer go broke?"
+        },
+        "answer": {
+          "text": "Because he used up all his cache!"
+        },
+        "author": "elijahmanor",
+        "created": "09/17/2013",
+        "tags": [],
+        "rating": 1
+      }
+    },
+    {
+      "text": "q. Why did the React Higher Order Component give up? a. Because it sur-rendered to the prop-aganda!",
+      "details": {
+        "question": {
+          "text": "Why did the React Higher Order Component give up?"
+        },
+        "answer": {
+          "text": "Because it sur-rendered to the prop-aganda!"
+        },
+        "author": "elijahmanor",
+        "created": "10/31/2017",
+        "tags": ["javascript", "react"],
+        "rating": 1
+      }
+    },
+    {
+      "text": "When a JavaScript date has gone bad, \"Don't call me, I'll callback you. I promise!\"",
+      "details": {
+        "author": "elijahmanor",
+        "created": "09/09/2013",
+        "tags": ["javascript"],
+        "rating": 2
+      }
+    },
+    {
+      "text": "q. Why did the react class component feel relieved? a. Because it was now off the hook.",
+      "details": {
+        "question": {
+          "text": "Why did the react class component feel relieved?"
+        },
+        "answer": {
+          "text": "Because it was now off the hook."
+        },
+        "author": "elijahmanor",
+        "created": "11/27/2018",
+        "tags": ["javascript", "react"],
+        "rating": 4
+      }
+    },
+    {
+      "text": "q. Why did the react developer have an addiction? a. Because they were completely hooked on the hooks proposal.",
+      "details": {
+        "question": {
+          "text": "Why did the react developer have an addiction?"
+        },
+        "answer": {
+          "text": "Because they were completely hooked on the hooks proposal."
+        },
+        "author": "elijahmanor",
+        "created": "11/27/2018",
+        "tags": ["javascript", "react"],
+        "rating": 4
+      }
+    },
+    {
+      "text": "q. What does a React proposal mean? a. It means to swallow something hook, line and sinker.",
+      "details": {
+        "question": {
+          "text": "What does a React proposal mean?"
+        },
+        "answer": {
+          "text": "It means to swallow something hook, line and sinker."
+        },
+        "author": "elijahmanor",
+        "created": "11/27/2018",
+        "tags": ["javascript", "react"],
+        "rating": 5
+      }
+    },
+    {
+      "text": "q. Why was the react developer late to everything? a. Because they were playing hooky with the hooks proposal",
+      "details": {
+        "question": {
+          "text": "Why was the react developer late to everything?"
+        },
+        "answer": {
+          "text": "Because they were playing hooky with the hooks proposal."
+        },
+        "author": "elijahmanor",
+        "created": "11/27/2018",
+        "tags": ["javascript", "react"],
+        "rating": 5
+      }
+    },
+    {
+      "text": "q. Why couldn’t the React component understand the joke? a. Because it didn’t get the context.",
+      "details": {
+        "question": {
+          "text": "Why couldn’t the React component understand the joke?"
+        },
+        "answer": {
+          "text": "Because it didn’t get the context."
+        },
+        "author": "elijahmanor",
+        "created": "11/27/2018",
+        "tags": ["javascript", "react"],
+        "rating": 2
+      }
+    },
+    {
+      "text": "Dev1 saw a strange JavaScript function & asked, \"What is this?\". Dev2 responded, \"I don't know. I would've called you, but I was in a bind\"",
+      "details": {
+        "author": "elijahmanor",
+        "created": "09/09/2013",
+        "tags": ["javascript"],
+        "rating": 3
+      }
+    },
+    {
+      "text": "Two JavaScript developers walked into the variable `bar`. Ouch!",
+      "details": {
+        "author": "elijahmanor",
+        "created": "09/10/2013",
+        "tags": ["javascript"],
+        "rating": 3
+      }
+    },
+    {
+      "text": "q. Why did Jason cover himself with bubble wrap? a. Because he wanted to make a cross-domain JSONP request.",
+      "details": {
+        "question": {
+          "text": "Why did Jason cover himself with bubble wrap?"
+        },
+        "answer": {
+          "text": "Because he wanted to make a cross-domain JSONP request"
+        },
+        "author": "elijahmanor",
+        "created": "09/11/2013",
+        "tags": ["javascript"],
+        "rating": 5
+      }
+    },
+    {
+      "text": "q. Why did the software company hire drama majors from Starbucks? a. Because they needed JavaScript experts!",
+      "details": {
+        "question": {
+          "text": "Why did the software company hire drama majors from Starbucks?"
+        },
+        "answer": {
+          "text": "Because they needed JavaScript experts!"
+        },
+        "author": "elijahmanor",
+        "created": "09/12/2013",
+        "tags": ["javascript"],
+        "rating": 4
+      }
+    },
+    {
+      "text": "q. Why did the CoffeeScript developer keep getting lost? a. Because he couldn't find his source without a map!",
+      "details": {
+        "question": {
+          "text": "Why did the CoffeeScript developer keep getting lost?"
+        },
+        "answer": {
+          "text": "Because he couldn't find his source without a map!"
+        },
+        "author": "elijahmanor",
+        "created": "09/13/2013",
+        "tags": ["javascript", "coffeescript"],
+        "rating": 5
+      }
+    },
+    {
+      "text": "q. What do you call __proto__? a. Dunder proto q. Michael Scott was the regional manager where? a. __mifflin__",
+      "details": {
+        "question": {
+          "text": "What do you call __proto__? Dunder proto. Michael Scott was the regional manager where?"
+        },
+        "answer": {
+          "text": "__mifflin__"
+        },
+        "author": "elijahmanor",
+        "created": "09/16/2013",
+        "tags": ["javascript"],
+        "rating": 3
+      }
+    },
+    {
+      "text": "q. How did the doctor revive the developer? a. The dev wasn't responsive so the doc picked him up by his bootstraps!",
+      "details": {
+        "question": {
+          "text": "How did the doctor revive the developer?"
+        },
+        "answer": {
+          "text": "The dev wasn't responsive so the doc picked him up by his bootstraps!"
+        },
+        "author": "elijahmanor",
+        "created": "09/16/2013",
+        "tags": ["css"],
+        "rating": 5
+      }
+    },
+    {
+      "text": "q. Why did the C# developer fall asleep? a. Because he didn't like Java.",
+      "details": {
+        "question": {
+          "text": "Why did the C# developer fall asleep?"
+        },
+        "answer": {
+          "text": "Because he didn't like Java."
+        },
+        "author": "elijahmanor",
+        "created": "09/18/2013",
+        "tags": ["java", "c#"],
+        "rating": 2
+      }
+    },
+    {
+      "text": "q. Why did the JavaScript boxer goto the chiropractor? a. Because his backbone was angular from a knockout and required attention!",
+      "details": {
+        "question": {
+          "text": "Why did the JavaScript boxer goto the chiropractor?"
+        },
+        "answer": {
+          "text": "Because his backbone was angular from a knockout and required attention!"
+        },
+        "author": "elijahmanor",
+        "created": "09/19/2013",
+        "tags": ["javascript", "knockout", "backbone"],
+        "rating": 5
+      }
+    },
+    {
+      "text": "q. How did the web dev hurt Comic Sans feelings? a. Once he saw the font he quickly changed to Open Sans and exclaimed \"In your @font-face!\"",
+      "details": {
+        "question": {
+          "text": "How did the web dev hurt Comic Sans feelings?"
+        },
+        "answer": {
+          "text": "Once he saw the font he quickly changed to Open Sans and exclaimed \"In your @font-face!\""
+        },
+        "author": "elijahmanor",
+        "created": "09/20/2013",
+        "tags": ["css"],
+        "rating": 5
+      }
+    },
+    {
+      "text": "q. Why was Ember.js turning red? a. Because it was EMBERrassed for not remEMBERing its route home!",
+      "details": {
+        "question": {
+          "text": "Why was Ember.js turning red?"
+        },
+        "answer": {
+          "text": "Because it was EMBERrassed for not remEMBERing its route home!"
+        },
+        "author": "elijahmanor",
+        "created": "09/24/2013",
+        "tags": ["javascript", "ember"],
+        "rating": 5
+      }
+    },
+    {
+      "text": "dev1 > What tool do you use to switch versions of node? dev1> nvm, I figured it out.",
+      "details": {
+        "question": {
+          "text": "dev1 > What tool do you use to switch versions of node?"
+        },
+        "answer": {
+          "text": "dev1> nvm, I figured it out."
+        },
+        "author": "elijahmanor",
+        "created": "08/30/2019",
+        "tags": ["javascript", "node"],
+        "rating": 1
+      }
+    },
+    {
+      "text": "q. Why did the Web A11y Dev keep getting distracted? a. Beacuse they couldn't maintain focus!",
+      "details": {
+        "question": {
+          "text": "Why did the Web A11y Dev keep getting distracted?"
+        },
+        "answer": {
+          "text": "Beacuse they couldn't maintain focus!"
+        },
+        "author": "elijahmanor",
+        "created": "09/19/2019",
+        "tags": ["javascript", "css"],
+        "rating": 2
+      }
+    },
+    {
+      "text": "q. How do you make a Web App accessible? a. ARIA kidding me?",
+      "details": {
+        "question": {
+          "text": "How do you make a Web App accessible?"
+        },
+        "answer": {
+          "text": "ARIA kidding me?"
+        },
+        "author": "elijahmanor",
+        "created": "09/19/2019",
+        "tags": ["javascript", "css"],
+        "rating": 1
+      }
+    }
+  ]
+}
