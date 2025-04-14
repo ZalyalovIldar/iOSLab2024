@@ -9,7 +9,7 @@ class ViewController: UIViewController {
     }
     
     func req() async {
-        let response = await AF.request("https://httpbin.org/get", interceptor: .retryPolicy)
+        let response = AF.request("https://httpbin.org/get", interceptor: .retryPolicy)
                                .authenticate(username: "user", password: "pass")
                                .cacheResponse(using: .cache)
                                .redirect(using: .follow)
