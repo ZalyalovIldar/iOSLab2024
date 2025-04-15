@@ -1,0 +1,7 @@
+platform :ios, '17.6'
+workspace 'CocoaProjec.xcworkspace'
+pod 'Alamofire'
+target 'CocoaProjec' do
+  use_frameworks!
+  pod 'Alamofire'
+end
